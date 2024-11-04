@@ -1,4 +1,5 @@
-﻿using PeaceMaid.Application.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using PeaceMaid.Application.DTOs;
 using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Domain.Entities;
 using PeaceMaid.Infrastructure.Data;
@@ -9,29 +10,38 @@ namespace PeaceMaid.Infrastructure.Implementation
     {
         private readonly AppDbContext _context = context;
 
-        Task<ServiceResponse> IUser.AddAsync(User user)
+        async Task<ServiceResponse> IUser.AddAsync(User user)
         {
-            throw new NotImplementedException();
+            await _context.Users.AddAsync(user);
+            await SaveChangesAsync();
+
+            return new ServiceResponse(true, "Added");
         }
 
-        Task<ServiceResponse> IUser.DeleteAsync(int Id)
+        async Task<ServiceResponse> IUser.DeleteAsync(int Id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FindAsync(Id);
+            if (user == null)
+                return new ServiceResponse(false, "User not found");
+
+            _context.Users.Remove(user);
+            await SaveChangesAsync();
+
+            return new ServiceResponse(true, "Deleted");
         }
 
-        Task<List<User>> IUser.GetAllAsync()
+        async Task<List<User>> IUser.GetAllAsync() => await _context.Users.AsNoTracking().ToListAsync();
+
+        async Task<User> IUser.GetByIdAsync(int Id) => await _context.Users.FindAsync(Id);
+
+        async Task <ServiceResponse> IUser.UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            _context.Users.Update(user);
+            await SaveChangesAsync();
+
+            return new ServiceResponse(true, "Updated");
         }
 
-        Task<User> IUser.GetByIdAsync(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ServiceResponse> IUser.UpdateAsync(User user)
-        {
-            throw new NotImplementedException();
-        }
+        private async Task SaveChangesAsync() => await _context.SaveChangesAsync();
     }
 }
