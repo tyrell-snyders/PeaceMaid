@@ -11,7 +11,7 @@
         public Location? Address { get; set; }
 
         // Navigation Properties
-        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public ICollection<Booking>? Bookings { get; set; } = new List<Booking>();
+        public ICollection<Review>? Reviews { get; set; } = new List<Review>();
     }
 }
