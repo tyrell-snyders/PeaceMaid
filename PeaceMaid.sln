@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeaceMaid.Domain", "PeaceMaid.Domain\PeaceMaid.Domain.csproj", "{09682276-1231-447A-9EFB-9D04B2564064}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeaceMaid.Application", "PeaceMaid.Application\PeaceMaid.Application.csproj", "{D8651033-9DA1-4233-883E-0EE94609C577}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeaceMaid.Infrastructure", "PeaceMaid.Infrastructure\PeaceMaid.Infrastructure.csproj", "{3975B904-C6E5-47D1-A76B-12FD8487B2E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{162DAB84-F04C-417C-9851-25A09AF2B8A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeaceMaid.Presentation.WebAssembly", "PeaceMaid.Presentation.WebAssembly\PeaceMaid.Presentation.WebAssembly.csproj", "{E753F57B-498C-441A-93DA-C3809B00E5DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeaceMaid.Presentation.WebAPI", "PeaceMaid.Presentation.WebAPI\PeaceMaid.Presentation.WebAPI.csproj", "{6E991065-51D6-4754-8614-82932B2D082D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09682276-1231-447A-9EFB-9D04B2564064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09682276-1231-447A-9EFB-9D04B2564064}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09682276-1231-447A-9EFB-9D04B2564064}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09682276-1231-447A-9EFB-9D04B2564064}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8651033-9DA1-4233-883E-0EE94609C577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8651033-9DA1-4233-883E-0EE94609C577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8651033-9DA1-4233-883E-0EE94609C577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8651033-9DA1-4233-883E-0EE94609C577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3975B904-C6E5-47D1-A76B-12FD8487B2E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3975B904-C6E5-47D1-A76B-12FD8487B2E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3975B904-C6E5-47D1-A76B-12FD8487B2E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3975B904-C6E5-47D1-A76B-12FD8487B2E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E753F57B-498C-441A-93DA-C3809B00E5DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E753F57B-498C-441A-93DA-C3809B00E5DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E753F57B-498C-441A-93DA-C3809B00E5DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E753F57B-498C-441A-93DA-C3809B00E5DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E991065-51D6-4754-8614-82932B2D082D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E991065-51D6-4754-8614-82932B2D082D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E991065-51D6-4754-8614-82932B2D082D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E991065-51D6-4754-8614-82932B2D082D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E753F57B-498C-441A-93DA-C3809B00E5DA} = {162DAB84-F04C-417C-9851-25A09AF2B8A0}
+		{6E991065-51D6-4754-8614-82932B2D082D} = {162DAB84-F04C-417C-9851-25A09AF2B8A0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1097C23F-5215-47AC-A130-22481A05B2B0}
+	EndGlobalSection
+EndGlobal
