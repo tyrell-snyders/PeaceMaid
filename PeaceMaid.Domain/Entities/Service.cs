@@ -3,10 +3,13 @@
     public class Service
     {
         public int ServiceId { get; set; }
-        public int ServiceIdProvider { get; set; }
+        public int ServiceProviderId { get; set; }
         required public string Name { get; set; }
         required public decimal Price { get; set; }
         public TimeSpan Duration { get; set; }
         public string? Description { get; set; }
+
+        // Navigation Properties
+        public ServiceProvider? ServiceProvider { get; set; }
     }
 }
