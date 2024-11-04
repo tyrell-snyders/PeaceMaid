@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PeaceMaid.Application\PeaceMaid.Application.csproj" />
+    <ProjectReference Include="..\PeaceMaid.Infrastructure\PeaceMaid.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
