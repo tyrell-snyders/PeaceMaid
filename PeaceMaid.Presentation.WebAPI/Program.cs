@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using PeaceMaid.Application.Interfaces;
+using PeaceMaid.Application.Interfaces.Authentication;
 using PeaceMaid.Infrastructure.Data;
 using PeaceMaid.Infrastructure.Implementation;
+using PeaceMaid.Infrastructure.Implementation.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(
 
 // Repos
 builder.Services.AddScoped<IUser, UserRepo>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 var app = builder.Build();
 
@@ -25,6 +29,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(policy =>
+    {
+        policy.WithOrigins("https://localhost:7203")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithHeaders(HeaderNames.ContentType);
+    });
 }
 
 app.UseHttpsRedirection();

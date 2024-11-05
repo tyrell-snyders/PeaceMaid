@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Domain.Entities;
-using System.Runtime.InteropServices;
 
 namespace PeaceMaid.Presentation.WebAPI.Controllers
 {

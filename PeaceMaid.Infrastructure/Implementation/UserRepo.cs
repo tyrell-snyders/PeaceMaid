@@ -1,18 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PeaceMaid.Application.DTOs;
 using PeaceMaid.Application.Interfaces;
+using PeaceMaid.Application.Interfaces.Authentication;
 using PeaceMaid.Domain.Entities;
 using PeaceMaid.Infrastructure.Data;
 
 namespace PeaceMaid.Infrastructure.Implementation
 {
-    public class UserRepo(AppDbContext context) : IUser
+    public class UserRepo(AppDbContext context, IPasswordHasher passwordHasher) : IUser
     {
         private readonly AppDbContext _context = context;
+        private readonly IPasswordHasher _passwordHasher = passwordHasher;
 
         async Task<ServiceResponse> IUser.AddAsync(User user)
         {
-            await _context.Users.AddAsync(user);
+            var newUser = new User
+            {
+                Email = user.Email,
+                HashedPass = _passwordHasher.Hash(user.Email),
+                Username = user.Username,
+                Address = user.Address,
+                Bookings = user.Bookings,
+                Id = user.Id,
+                Reviews = user.Reviews,
+            };
+
+            await _context.Users.AddAsync(newUser);
             await SaveChangesAsync();
 
             return new ServiceResponse(true, "Added");
