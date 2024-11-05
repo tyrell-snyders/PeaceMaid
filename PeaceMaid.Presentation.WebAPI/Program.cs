@@ -21,6 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(
 // Repos
 builder.Services.AddScoped<IUser, UserRepo>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<ISProvider, ServiceProviderRepo>();
 
 var app = builder.Build();
 
