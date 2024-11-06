@@ -1,10 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
-using PeaceMaid.Application.Interfaces;
-using PeaceMaid.Application.Interfaces.Authentication;
 using PeaceMaid.Infrastructure.Data;
-using PeaceMaid.Infrastructure.Implementation;
-using PeaceMaid.Infrastructure.Implementation.Authentication;
+using PeaceMaid.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(
 ));
 
 // Repos
-builder.Services.AddScoped<IUser, UserRepo>();
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-builder.Services.AddScoped<ISProvider, ServiceProviderRepo>();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PeaceMaid.Application.Interfaces;
-using PeaceMaid.Domain.Entities;
 using ServiceProvider = PeaceMaid.Domain.Entities.ServiceProvider;
 
 
