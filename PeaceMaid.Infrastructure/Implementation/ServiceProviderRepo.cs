@@ -40,7 +40,7 @@ namespace PeaceMaid.Infrastructure.Implementation
             _context.ServiceProviders.Update(serviceProvider);
             await SaveChangesAsync();
 
-            return new(true, "Added");
+            return new(true, "Updated");
         }
 
         private async Task SaveChangesAsync() => await _context.SaveChangesAsync();
