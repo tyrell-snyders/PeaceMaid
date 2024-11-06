@@ -35,7 +35,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
             return Ok(data);
         }
 
-        [HttpPut("/update")]
+        [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] ServiceProvider sProviderDTO)
         {
             if (sProviderDTO == null)
@@ -45,7 +45,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("/delete/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delet(int id)
         {
             var result = await _sProvider.DeleteAsync(id);

@@ -1,4 +1,6 @@
-﻿namespace PeaceMaid.Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace PeaceMaid.Domain.Entities
 {
     public class ServiceProvider
     {
@@ -13,6 +15,8 @@
 
         // Foreign Key
         public int UserId { get; set; }
+
+        [JsonIgnore]
         public User? User { get; set; }
     }
 }

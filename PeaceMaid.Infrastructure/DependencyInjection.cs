@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PeaceMaid.Application;
 using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Application.Interfaces.Authentication;
 using PeaceMaid.Infrastructure.Implementation;
@@ -13,6 +14,7 @@ namespace PeaceMaid.Infrastructure
             services.AddScoped<ISProvider, ServiceProviderRepo>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IUser, UserRepo>();
+            services.AddScoped<IService, ServiceRepo>();
 
             return services;
         }

@@ -26,6 +26,7 @@ namespace PeaceMaid.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
+            modelBuilder.ApplyConfiguration(new ServiceConfig());
 
             // Tells EF core that it owns the Address property and it doesn't need a seperate DBTable for it
             modelBuilder.Entity<User>()

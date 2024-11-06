@@ -70,4 +70,18 @@ namespace PeaceMaid.Infrastructure.Configs
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
+
+    public class ServiceConfig: IEntityTypeConfiguration<Service>
+    {
+        public void Configure(EntityTypeBuilder<Service> builder)
+        {
+            builder.Property(s => s.Price)
+            .HasPrecision(18, 2);
+
+            builder.HasOne(s => s.ServiceProvider)
+                .WithMany()
+                .HasForeignKey(s => s.ServiceProviderId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
 }
