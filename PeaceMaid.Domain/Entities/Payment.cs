@@ -1,4 +1,6 @@
-﻿namespace PeaceMaid.Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace PeaceMaid.Domain.Entities
 {
     public class Payment
     {
@@ -6,16 +8,18 @@
         
         // User Foreign Key
         public int UserId { get; set; }
+        [JsonIgnore]
         public User? User { get; set; }
 
         // Booking Foreign Key
         public int BookingId { get; set; }
+        [JsonIgnore]
         public Booking? Booking { get; set; }
 
         public decimal Amount { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
         public PaymentStatus Status { get; set; }
-        public PaymentMethod Method { get; set; }
+        public PaymentMethod? Method { get; set; }
     }
 
     public enum PaymentStatus

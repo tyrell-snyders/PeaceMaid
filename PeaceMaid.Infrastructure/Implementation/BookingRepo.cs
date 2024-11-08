@@ -15,6 +15,27 @@ namespace PeaceMaid.Infrastructure.Implementation
             await _context.Bookings.AddAsync(booking);
             await SaveChangesAsync();
 
+            // create a new payment record in the db with the status of pending
+            var serviceId = booking.ServiceId;
+            var bookingId = booking.BookingId;
+            var userId = booking.UserId;
+
+            var amount = await _context.Services
+                .Where(s => s.ServiceId == serviceId)
+                .Select(s => s.Price)
+                .FirstOrDefaultAsync();
+
+            Payment payment = new Payment 
+            {
+                UserId = userId,
+                BookingId = bookingId,
+                Status = PaymentStatus.Pending,
+                Amount = amount
+            };
+
+            await _context.Payments.AddAsync(payment);
+            await SaveChangesAsync();
+
             return new(true, "Booked.");
         }
 

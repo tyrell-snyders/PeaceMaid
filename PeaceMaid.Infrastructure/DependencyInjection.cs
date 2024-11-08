@@ -16,6 +16,7 @@ namespace PeaceMaid.Infrastructure
             services.AddScoped<IUser, UserRepo>();
             services.AddScoped<IService, ServiceRepo>();
             services.AddScoped<IBooking, BookingRepo>();
+            services.AddScoped<IPayment, PaymentRepo>();
 
             return services;
         }
