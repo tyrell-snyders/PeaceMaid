@@ -5,9 +5,9 @@ namespace PeaceMaid.Application.Interfaces;
 
 public interface IReview
 {
-    public Task<List<Review>> GetAllReviews();
+    public Task<List<Review>> GetAllReviewsAsync();
     public Task<Review?> GetReviewAsync(int id);
-    public Task<ServiceResponse> CreateReview(Review review);
-    public Task<ServiceResponse> UpdateReview(Review review);
-    public Task<ServiceResponse> DeleteReview(int id);
+    public Task<ServiceResponse> CreateReviewAsync(Review review);
+    public Task<ServiceResponse> UpdateReviewAsync(Review review);
+    public Task<ServiceResponse> DeleteReviewAsync(int id);
 }

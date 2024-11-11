@@ -10,7 +10,7 @@ public class ReviewRepo(AppDbContext context) : IReview
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<ServiceResponse> CreateReview(Review review)
+    public async Task<ServiceResponse> CreateReviewAsync(Review review)
     {
         await _context.Reviews.AddAsync(review);
         await SaveChangesAsync();
@@ -18,7 +18,7 @@ public class ReviewRepo(AppDbContext context) : IReview
         return new(true, "Added");
     }
 
-    public async Task<ServiceResponse> DeleteReview(int id)
+    public async Task<ServiceResponse> DeleteReviewAsync(int id)
     {
         var review = await _context.Reviews.FindAsync(id);
         if (review == null)
@@ -30,13 +30,13 @@ public class ReviewRepo(AppDbContext context) : IReview
         return new(true, "Deleted");
     }
 
-    public async Task<List<Review>> GetAllReviews() =>
+    public async Task<List<Review>> GetAllReviewsAsync() =>
         await _context.Reviews.Distinct().Include(r => r.User).ToListAsync();
 
     public async Task<Review?> GetReviewAsync(int id) =>
         await _context.Reviews.FindAsync(id);
 
-    public async Task<ServiceResponse> UpdateReview(Review review)
+    public async Task<ServiceResponse> UpdateReviewAsync(Review review)
     {
         _context.Reviews.Update(review);
         await SaveChangesAsync();

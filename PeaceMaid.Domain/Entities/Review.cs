@@ -9,6 +9,7 @@
         public string? Comment { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        // Navigation properties
         public User? User { get; set; }
     }
 }
