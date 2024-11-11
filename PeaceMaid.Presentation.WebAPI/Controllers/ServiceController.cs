@@ -13,6 +13,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetServices()
         {
+            
             var data = await _service.GetAsync();
             return Ok(data);
         }
