@@ -10,12 +10,18 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
     {
         private readonly IPayment _payment = payment;
 
-        [HttpPost]
-        public async Task<IActionResult> Payment([FromBody]int Id, [FromBody]PaymentMethod paymentMethod)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Payment([FromBody] PaymentMethod paymentMethod, int id)
         {
-            var result = await _payment.PayAsync(Id, paymentMethod);
+            var result = await _payment.PayAsync(id, paymentMethod);
 
             return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPaymentMethods()
+        {
+            return Ok(await _payment.GetPaymentMethodsAsync());
         }
     }
 }

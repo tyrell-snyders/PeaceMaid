@@ -7,5 +7,6 @@ namespace PeaceMaid.Application.Interfaces
     {
         Task<ServiceResponse> PayAsync(int id, PaymentMethod paymentMethod);
         Task<ServiceResponse> CancelAsync(int id);
+        Task<HashSet<string>> GetPaymentMethodsAsync();
     }
 }

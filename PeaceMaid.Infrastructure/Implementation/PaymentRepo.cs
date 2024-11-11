@@ -22,6 +22,18 @@ namespace PeaceMaid.Infrastructure.Implementation
             return new(true, "Removed");
         }
 
+        public async Task<HashSet<string>> GetPaymentMethodsAsync()
+        {
+            var paymentMethods = new HashSet<string>
+            {
+                PaymentMethod.Credit_Card.ToString().ToUpper(), 
+                PaymentMethod.PayPal.ToString().ToUpper(), 
+                PaymentMethod.EFT.ToString().ToUpper(),
+            };
+
+            return paymentMethods;
+        }
+
         public async Task<ServiceResponse> PayAsync(int id, PaymentMethod paymentMethod)
         {
             var payment = await _context.Payments.FindAsync(id);
