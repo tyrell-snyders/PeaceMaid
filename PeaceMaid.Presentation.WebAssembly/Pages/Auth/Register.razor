@@ -1,0 +1,74 @@
+﻿@page "/register"
+
+@using NetcodeHub.Packages.Components.Toast
+@using PeaceMaid.Application.Services
+@using PeaceMaid.Domain.Entities
+@using NetcodeHub.Packages.Components.Validations.OnInput
+
+@inject IUserService userService
+
+<PageTitle>Register</PageTitle>
+<div class="row">
+    <div class="col-lg-6">
+        <EditForm Model="user" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <FloatingText @bind-Value="user.Username" Label="Username" Placeholder="john-doe" class="mb-3 form-control" />
+            <ValidationMessage For="()=>user.Username" />
+            <FloatingText @bind-Value="user.Email" Label="Email" Placeholder="john@gmail.com" class="mb-3 form-control" />
+            <ValidationMessage For="()=>user.Email" />
+            <FloatingText @bind-Value="user.HashedPass" Label="Password" Type="Password" class="mb-3 form-control" />
+            <ValidationMessage For="()=>user.HashedPass" />
+
+
+            <FloatingText @bind-Value="user.Address.Country" Label="Country" Placeholder="America" class="mb-3 form-control" />
+            <FloatingText @bind-Value="user.Address.State" Label="State" Placeholder="Georgia" class="mb-3 form-control" />
+            <FloatingText @bind-Value="user.Address.City" Label="City" Placeholder="New York City" class="mb-3 form-control" />
+            <FloatingText @bind-Value="user.Address.PostalCode" Label="Postal Code" class="mb-3 form-control" />
+            <FloatingText @bind-Value="user.Address.HouseAddress" Label="House Address" class="mb-3 form-control" />
+
+            <button class="btn btn-primary mt-5 mb-5" type="submit">Register</button>
+        </EditForm>
+    </div>
+</div>
+
+<NetcodeHubToast @ref="toastComp"
+                 IconClass="bi bi-check"
+                 Persist="false"
+                 Duration="duration" />
+
+
+@code {
+    NetcodeHubToast? toastComp;
+    int duration = 4000;
+    User user = new User
+        {
+            Username = string.Empty,  // Set default or placeholder values for required properties
+            Email = string.Empty,
+            HashedPass = string.Empty,
+
+            Address = new Location()
+        };
+
+    async Task Save()
+    {
+        if (user.Username == string.Empty)
+        {
+            duration = 5000;
+            toastComp.ShowErrorToast("Alert", "Please fill empty fields");
+
+            return;
+        }
+
+        var (flag, message) = await userService.AddAsync(user);
+        if (!flag)
+        {
+            duration = 5000;
+            toastComp.ShowErrorToast("Alert", message);
+
+            return;
+        }
+
+        toastComp.ShowSuccessToast("Success", message);
+
+    }
+}
