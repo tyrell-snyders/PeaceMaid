@@ -6,6 +6,7 @@
 
 main {
     flex: 1;
+    font-family: 'Merriweather', sans-serif;
 }
 
 .sidebar {

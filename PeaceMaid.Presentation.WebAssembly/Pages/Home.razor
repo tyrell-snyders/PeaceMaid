@@ -1,13 +1,78 @@
 ﻿@page "/"
+@inject NavigationManager NavigationManager
 
 <PageTitle>Home</PageTitle>
 
-<div class="row">
+<div class="welcome">
+    <h2>Welcome to PeaceMaid</h2>
+    <p>Your go-to platform for premium maid services!</p>
 
+    <div class="container mt-4">
+        <p>@intro</p>
+    </div> 
 </div>
 
+<div class="card container shadow-lg mt-5">
+    <h3>Why Choose PeaceMaid?</h3>
+    <ul>
+        <li>
+            <strong>Reliable Professionals:</strong>
+            <p>
+                Our service providers are verified and experience, giving you peace of mind
+            </p>
+        </li>
+        <li>
+            <strong>Easy Booking:</strong>
+            <p>Schedule a service in just a few clicks</p>
+        </li>
+        <li>
+            <strong>Transparent Pricing:</strong>
+            <p>
+                No hidden fees, only fair and competitive rates.
+            </p>
+        </li>
+    </ul>
+</div>
 
+<article class="card container mt-5 shadow-lg">
+    <h3>How It Works:</h3>
+    <ol>
+        <li>
+            <strong>Book:</strong>
+            <p>Choose the service you need and set your preferred tiume.</p>
+        </li>
+        <li>
+            <strong>Connect:</strong>
+            <p>The Service Porvider will get notified and contact you.</p>
+        </li>
+        <li>
+            <strong>Relax:</strong>
+            <p>Enjoy your clean and organized space!</p>
+        </li>
+    </ol>
+</article>
+
+<hr  class="mt-5 card"/>
+
+<div class="container get-started shadow-sm">
+    <h3>Get Started Today!</h3>
+    <ul>
+        <li>Explore available services</li>
+        <li>Signg up as a customer or a service provider.</li>
+        <li>Experience the peace of a clean home with PeaceMaid!</li>
+    </ul>
+
+    <div class="mt-4">
+        <button class="btn btn-outline-primary p-2 rounded-pill" onclick="@HandleRedirect">Get Started</button>
+    </div>
+</div>
 
 @code {
-    
+    string intro = @"
+                    At PeaceMaid, we connect you with trusted and skilled professionals to meet all your cleaning needs. 
+                    Whether you're looking for one-time deep clean or regular housekeeping, PeaceMaid makes 
+                    it simple to book services tailored to your schedule.
+                    ";
+
+    void HandleRedirect() => NavigationManager.NavigateTo("/register");
 }

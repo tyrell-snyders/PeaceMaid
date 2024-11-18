@@ -32,10 +32,9 @@
 </div>
 
 <NetcodeHubToast @ref="toastComp"
-                 IconClass="bi bi-check"
-                 Persist="false"
-                 Duration="duration" />
-
+    IconClass="bi bi-check"
+    Persist="false"
+    Duration="duration" />
 
 @code {
     NetcodeHubToast? toastComp;
@@ -49,12 +48,16 @@
             Address = new Location()
         };
 
+    /// <summary>
+    ///  Async Method that is called when the user submits the form data
+    /// </summary>
+    /// <returns>void</returns>
     async Task Save()
     {
         if (user.Username == string.Empty)
         {
             duration = 5000;
-            toastComp.ShowErrorToast("Alert", "Please fill empty fields");
+            await toastComp.ShowErrorToast("Alert", "Please fill empty fields");
 
             return;
         }
@@ -63,12 +66,12 @@
         if (!flag)
         {
             duration = 5000;
-            toastComp.ShowErrorToast("Alert", message);
+            await toastComp.ShowErrorToast("Alert", message);
 
             return;
         }
 
-        toastComp.ShowSuccessToast("Success", message);
+        await toastComp.ShowSuccessToast("Success", message);
 
     }
 }

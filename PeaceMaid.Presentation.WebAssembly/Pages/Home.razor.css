@@ -1,0 +1,25 @@
+﻿.container {
+    padding: 30px;
+    font-size: 18px;
+}
+
+.welcome, p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-justify-content: inherit;
+    justify-content: inherit;
+}
+
+.card {
+    background-color: lightgray;
+    box-shadow: inset;
+}
+
+.get-started {
+    -ms-flex: inherit;
+    -webkit-flex: inherit;
+    flex: inherit;
+    margin-top: 60px !important;
+    justify-content: space-around;
+}
