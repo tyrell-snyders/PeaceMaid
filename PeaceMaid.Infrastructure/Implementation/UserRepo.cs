@@ -25,6 +25,14 @@ namespace PeaceMaid.Infrastructure.Implementation
                 Reviews = user.Reviews,
             };
 
+            // check for duplicates. Only 1 email can be connected to 1 user
+            var check = await _context.Users.FirstOrDefaultAsync(_ => 
+                _.Email.ToLower() == newUser.Email.ToLower()
+            );
+
+            if (check != null)
+                return new(false, "User already exists");
+
             await _context.Users.AddAsync(newUser);
             await SaveChangesAsync();
 

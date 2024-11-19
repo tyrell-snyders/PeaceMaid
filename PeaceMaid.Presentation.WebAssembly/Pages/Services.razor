@@ -1,0 +1,34 @@
+﻿@page  "/services"
+
+@using PeaceMaid.Application.Services.Svcs
+@using PeaceMaid.Domain.Entities
+
+@inject ISvcsService svcsService
+
+<h3>Services</h3>
+
+@if (services == null) {
+    <p>Loadin services...</p>
+} else if (!services.Any()){
+    <p>No services available.</p>
+} else {
+    <ul>
+        @foreach (var service in services) {
+            <li>
+                <strong>@service.Name:</strong> @service.Description (Price: @service.Price)
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Service>? services;
+
+    protected override async Task OnInitializedAsync() {
+        try {
+            services = await svcsService.GetAsync();
+        } catch(Exception e){
+            Console.WriteLine($"Error fethcing dservices: {e.Message}");
+        }
+    }
+}
