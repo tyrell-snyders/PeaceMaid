@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PeaceMaid.Application.DTOs;
 using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Domain.Entities;
 
@@ -38,7 +39,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         /// </summary>
         /// <param name="userDTO"></param>
         /// <returns>ServiceResponse</returns>
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Add([FromBody] User userDTO)
         {
             if (userDTO == null)
@@ -72,6 +73,13 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _user.DeleteAsync(id);
+            return Ok(result);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody]UserDTO userDTO)
+        {
+            var result = await _user.LoginAsync(userDTO);
             return Ok(result);
         }
     }

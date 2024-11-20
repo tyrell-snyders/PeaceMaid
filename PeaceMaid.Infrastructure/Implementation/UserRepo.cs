@@ -63,6 +63,20 @@ namespace PeaceMaid.Infrastructure.Implementation
             return new ServiceResponse(true, "Updated");
         }
 
+        public async Task<string> LoginAsync(UserDTO userDTO)
+        {
+            // TODO: Add JWT handling for login purposes
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
+            if (_passwordHasher.Verify(user.HashedPass, userDTO.Password))
+            {
+                return "Logged In";
+            }
+
+            return "Not logged in";
+        }
+
         private async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+
+        
     }
 }

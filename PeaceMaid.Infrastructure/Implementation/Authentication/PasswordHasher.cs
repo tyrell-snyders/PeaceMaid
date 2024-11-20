@@ -18,6 +18,12 @@ namespace PeaceMaid.Infrastructure.Implementation.Authentication
             return $"{Convert.ToHexString(hash)}-{Convert.ToHexString(salt)}";
         }
 
+        /// <summary>
+        /// Compares 2 strings (HashedPassword and password) together and returns if they match
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <returns></returns>
         public bool Verify(string password, string passwordHash)
         {
             string[] parts = passwordHash.Split('-');
