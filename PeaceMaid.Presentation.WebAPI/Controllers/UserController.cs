@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PeaceMaid.Application.DTOs;
 using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Domain.Entities;
@@ -54,6 +55,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         /// </summary>
         /// <param name="userDTO"></param>
         /// <returns>ServiceResponse</returns>
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] User userDTO)
         {

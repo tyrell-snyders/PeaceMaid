@@ -4,6 +4,9 @@ using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Application.Interfaces.Authentication;
 using PeaceMaid.Infrastructure.Implementation;
 using PeaceMaid.Infrastructure.Implementation.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace PeaceMaid.Infrastructure
 {
@@ -18,6 +21,22 @@ namespace PeaceMaid.Infrastructure
             services.AddScoped<IBooking, BookingRepo>();
             services.AddScoped<IPayment, PaymentRepo>();
             services.AddScoped<IReview, ReviewRepo>();
+
+            // JWT auth
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Key")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+            });
 
             return services;
         }

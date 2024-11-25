@@ -1,9 +1,12 @@
-﻿namespace PeaceMaid.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PeaceMaid.Domain.Entities
 {
     public class User
     {
         public int Id { get; set; }
         required public string Username { get; set; }
+        [EmailAddress]
         required public string Email { get; set; }
         required public string HashedPass { get; set; }
 

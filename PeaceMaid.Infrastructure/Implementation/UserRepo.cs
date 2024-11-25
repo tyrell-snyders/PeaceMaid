@@ -4,14 +4,16 @@ using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Application.Interfaces.Authentication;
 using PeaceMaid.Domain.Entities;
 using PeaceMaid.Infrastructure.Data;
+using PeaceMaid.Infrastructure.Middleware;
+
 
 namespace PeaceMaid.Infrastructure.Implementation
 {
-    public class UserRepo(AppDbContext context, IPasswordHasher passwordHasher) : IUser
+    public class UserRepo(AppDbContext context, IPasswordHasher passwordHasher, UserAuth userAuth) : IUser
     {
         private readonly AppDbContext _context = context;
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
-
+        private readonly UserAuth _userAuth = userAuth;
         async Task<ServiceResponse> IUser.AddAsync(User user)
         {
             var newUser = new User
@@ -65,11 +67,11 @@ namespace PeaceMaid.Infrastructure.Implementation
 
         public async Task<string> LoginAsync(UserDTO userDTO)
         {
-            // TODO: Add JWT handling for login purposes
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
-            if (_passwordHasher.Verify(user.HashedPass, userDTO.Password))
+            if (user != null && _passwordHasher.Verify(user.HashedPass, userDTO.Password))
             {
-                return "Logged In";
+                // Create a JWT token
+                return _userAuth.CreateToken(user);
             }
 
             return "Not logged in";
