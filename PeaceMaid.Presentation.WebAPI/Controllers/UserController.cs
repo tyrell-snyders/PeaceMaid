@@ -17,6 +17,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         /// </summary>
         /// <returns>A List of users</returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             var data = await _user.GetAllAsync();

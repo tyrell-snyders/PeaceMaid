@@ -7,6 +7,7 @@ using PeaceMaid.Infrastructure.Implementation.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using PeaceMaid.Infrastructure.Middleware;
 
 namespace PeaceMaid.Infrastructure
 {
@@ -23,11 +24,9 @@ namespace PeaceMaid.Infrastructure
             services.AddScoped<IReview, ReviewRepo>();
 
             // JWT auth
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+            services.AddScoped<UserAuth>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
