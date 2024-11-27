@@ -7,6 +7,7 @@ namespace PeaceMaid.Application.Services
     public class UserService(HttpClient httpClient) : IUserService
     {
         private readonly HttpClient _httpClient = httpClient;
+
         public async Task<ServiceResponse> AddAsync(User user)
         {
             var data = await _httpClient.PostAsJsonAsync("api/User", user);
