@@ -9,18 +9,19 @@ namespace PeaceMaid.Infrastructure.Middleware
 {
     public class UserAuth
     {
-        public String CreateToken(User user)
+        public string CreateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("SecretKey");
+            // TODO: Secret key must be env variable
+            var key = Encoding.UTF8.GetBytes("my-very-very-very-super-secret-key");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
+                Subject = new ClaimsIdentity(
+                [
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Name, user.Username),
-                }),
+                ]),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
