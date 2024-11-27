@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PeaceMaid.Application;
 using PeaceMaid.Domain.Entities;
 
@@ -26,6 +27,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostService([FromBody]Service sv)
         {
             var result = await _service.AddAsync(sv);
@@ -33,6 +35,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize]
         public async Task<IActionResult> UpdateServicec([FromBody]Service sv)
         {
             var result = await _service.UpdateAsync(sv);
@@ -40,6 +43,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpDelete("delete/{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteService(int id)
         {
             var result = await _service.DeleteAsync(id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Domain.Entities;
 
@@ -6,6 +7,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BookingController(IBooking booking) : ControllerBase
     {
         private readonly IBooking _booking = booking;

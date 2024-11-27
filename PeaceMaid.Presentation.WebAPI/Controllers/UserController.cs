@@ -30,6 +30,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns>ServiceResponse</returns>
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUser(int id)
         {
             var result = await _user.GetByIdAsync(id);
@@ -42,6 +43,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         /// <param name="userDTO"></param>
         /// <returns>ServiceResponse</returns>
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Add([FromBody] User userDTO)
         {
             if (userDTO == null)
@@ -73,6 +75,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns>ServiceResponse</returns>
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _user.DeleteAsync(id);

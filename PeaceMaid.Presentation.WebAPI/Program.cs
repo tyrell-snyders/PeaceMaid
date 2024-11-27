@@ -3,6 +3,7 @@ using Microsoft.Net.Http.Headers;
 using PeaceMaid.Infrastructure.Data;
 using PeaceMaid.Infrastructure;
 using Microsoft.OpenApi.Models;
+using PeaceMaid.Presentation.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,21 +25,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Enter 'Bearer' followed by a space and your JWT token"
     });
 
-    // Apply Bearer Token globally
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] { } //Scopes
-        }
-    });
+    // Apply Bearer Token conditionally
+    c.OperationFilter<AuthorizeCheckOperationFilter>();
 });
 
 // DB

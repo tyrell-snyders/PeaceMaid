@@ -68,7 +68,7 @@ namespace PeaceMaid.Infrastructure.Implementation
         public async Task<string> LoginAsync(UserDTO userDTO)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
-            if (user != null && _passwordHasher.Verify(user.HashedPass, userDTO.Password))
+            if (user != null && _passwordHasher.Verify(userDTO.Password, user.HashedPass))
             {
                 // Create a JWT token
                 return _userAuth.CreateToken(user);

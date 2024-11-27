@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PeaceMaid.Application.Interfaces;
@@ -26,6 +27,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostReview([FromBody] Review rvw)
         {
             var data = await _review.CreateReviewAsync(rvw);
@@ -33,6 +35,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPut("update/{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateReview([FromBody] Review rvw)
         {
             var data = await _review.UpdateReviewAsync(rvw);
@@ -40,6 +43,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpDelete("delete/{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteReview(int id)
         {
             var data = await _review.DeleteReviewAsync(id);
