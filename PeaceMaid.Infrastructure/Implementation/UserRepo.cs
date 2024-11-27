@@ -14,12 +14,12 @@ namespace PeaceMaid.Infrastructure.Implementation
         private readonly AppDbContext _context = context;
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
         private readonly UserAuth _userAuth = userAuth;
-        async Task<ServiceResponse> IUser.AddAsync(User user)
+        public async Task<ServiceResponse> AddAsync(User user)
         {
             var newUser = new User
             {
                 Email = user.Email,
-                HashedPass = _passwordHasher.Hash(user.Email),
+                HashedPass = _passwordHasher.Hash(user.HashedPass),
                 Username = user.Username,
                 Address = user.Address,
                 Bookings = user.Bookings,
@@ -41,7 +41,7 @@ namespace PeaceMaid.Infrastructure.Implementation
             return new ServiceResponse(true, "Added");
         }
 
-        async Task<ServiceResponse> IUser.DeleteAsync(int Id)
+        public async Task<ServiceResponse> DeleteAsync(int Id)
         {
             var user = await _context.Users.FindAsync(Id);
             if (user == null)
@@ -53,11 +53,11 @@ namespace PeaceMaid.Infrastructure.Implementation
             return new ServiceResponse(true, "Deleted");
         }
 
-        async Task<List<User>> IUser.GetAllAsync() => await _context.Users.AsNoTracking().ToListAsync();
+        public async Task<List<User>> GetAllAsync() => await _context.Users.AsNoTracking().ToListAsync();
 
-        async Task<User> IUser.GetByIdAsync(int Id) => await _context.Users.FindAsync(Id);
+        public async Task<User> GetByIdAsync(int Id) => await _context.Users.FindAsync(Id);
 
-        async Task <ServiceResponse> IUser.UpdateAsync(User user)
+        public async Task <ServiceResponse> UpdateAsync(User user)
         {
             _context.Users.Update(user);
             await SaveChangesAsync();
