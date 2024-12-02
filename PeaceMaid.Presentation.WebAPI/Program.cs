@@ -35,7 +35,7 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(
 ));
 
 // Repos
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

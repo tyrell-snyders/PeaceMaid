@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PeaceMaid.Application.DTOs;
 using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Application.Interfaces.Authentication;
@@ -10,11 +11,12 @@ using System.Text.RegularExpressions;
 
 namespace PeaceMaid.Infrastructure.Implementation
 {
-    public class UserRepo(AppDbContext context, IPasswordHasher passwordHasher, UserAuth userAuth) : IUser
+    public class UserRepo(AppDbContext context, IPasswordHasher passwordHasher, UserAuth userAuth, IConfiguration configuration) : IUser
     {
         private readonly AppDbContext _context = context;
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
         private readonly UserAuth _userAuth = userAuth;
+        private readonly IConfiguration _configuration = configuration;
         public async Task<ServiceResponse> AddAsync(User user)
         {
             if (!Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
@@ -80,7 +82,7 @@ namespace PeaceMaid.Infrastructure.Implementation
             }
 
             return _passwordHasher.Verify(userDTO.Password, user.HashedPass)
-                ? _userAuth.CreateToken(user)
+                ? _userAuth.CreateToken(user, configuration)
                 : "Not logged in";
         }
 
