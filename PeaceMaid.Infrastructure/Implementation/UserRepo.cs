@@ -5,6 +5,7 @@ using PeaceMaid.Application.Interfaces.Authentication;
 using PeaceMaid.Domain.Entities;
 using PeaceMaid.Infrastructure.Data;
 using PeaceMaid.Infrastructure.Middleware;
+using System.Text.RegularExpressions;
 
 
 namespace PeaceMaid.Infrastructure.Implementation
@@ -16,6 +17,11 @@ namespace PeaceMaid.Infrastructure.Implementation
         private readonly UserAuth _userAuth = userAuth;
         public async Task<ServiceResponse> AddAsync(User user)
         {
+            if (!Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                return new ServiceResponse(false, $"Invalid email address format: {user.Email}");
+            }
+
             var newUser = new User
             {
                 Email = user.Email,
@@ -27,13 +33,12 @@ namespace PeaceMaid.Infrastructure.Implementation
                 Reviews = user.Reviews,
             };
 
-            // check for duplicates. Only 1 email can be connected to 1 user
-            var check = await _context.Users.FirstOrDefaultAsync(_ => 
-                _.Email.ToLower() == newUser.Email.ToLower()
-            );
-
+            // Existing duplicate check logic
+            var check = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == user.Email.ToLower());
             if (check != null)
-                return new(false, "User already exists");
+            {
+                return new ServiceResponse(false, "User already exists");
+            }
 
             await _context.Users.AddAsync(newUser);
             await SaveChangesAsync();
@@ -68,13 +73,15 @@ namespace PeaceMaid.Infrastructure.Implementation
         public async Task<string> LoginAsync(UserDTO userDTO)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
-            if (user != null && _passwordHasher.Verify(userDTO.Password, user.HashedPass))
+
+            if (user == null || !Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                // Create a JWT token
-                return _userAuth.CreateToken(user);
+                return user == null ? "Not logged in" : $"Invalid email address format: {user.Email}";
             }
 
-            return "Not logged in";
+            return _passwordHasher.Verify(userDTO.Password, user.HashedPass)
+                ? _userAuth.CreateToken(user)
+                : "Not logged in";
         }
 
         private async Task SaveChangesAsync() => await _context.SaveChangesAsync();

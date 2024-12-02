@@ -6,9 +6,6 @@ using PeaceMaid.Domain.Entities;
 using PeaceMaid.Infrastructure.Data;
 using PeaceMaid.Infrastructure.Implementation;
 using PeaceMaid.Infrastructure.Middleware;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PeaceMaid.Application.Interfaces.Authentication;
 
@@ -71,6 +68,89 @@ namespace PeaceMaid.Tests.Infrastructure.Implementaion
             Assert.Equal("testUser", savedUser.Username);
             Assert.Equal("test@example.com", savedUser.Email);
             Assert.Equal(hashedPassword, savedUser.HashedPass);
+        }
+
+        [Fact]
+        public async Task AddAsync_ShouldAssUser_WithEmptyNavigationProperties()
+        {
+            // Arrange
+            var hashedPassword = "hashed_password";
+            _mockPasswordHasher
+                .Setup(ph => ph.Hash(It.IsAny<string>()))
+                .Returns(hashedPassword);
+
+            var user = new User
+            {
+                Email = "test@example.com",
+                Username = "testUser",
+                HashedPass = hashedPassword,
+                Bookings = new List<Booking>(),
+                Reviews = new List<Review>()
+            };
+
+            // Act
+            var response = await _userRepo.AddAsync(user);
+
+            // Assert
+            Assert.True(response.Flag);
+            var savedUser = await _dbContext.Users
+                .Include(u => u.Bookings)
+                .Include(u => u.Reviews)
+                .FirstAsync();
+            Assert.NotNull(savedUser.Bookings);
+            Assert.Empty(savedUser.Bookings);
+            Assert.NotNull(savedUser.Reviews);
+            Assert.Empty(savedUser.Reviews);
+        }
+
+        [Fact]
+        public async Task AddAsync_ShouldAllowNullAddress()
+        {
+            // Arrange
+            var hashedPassword = "hashed_password";
+            _mockPasswordHasher
+                .Setup(ph => ph.Hash(It.IsAny<string>()))
+                .Returns(hashedPassword);
+
+            var user = new User
+            {
+                Username = "TestUser",
+                Email = "test@example.com",
+                HashedPass = hashedPassword,
+                Address = null // Optional field
+            };
+
+            // Act
+            var response = await _userRepo.AddAsync(user);
+
+            // Assert
+            Assert.True(response.Flag);
+            var savedUser = await _dbContext.Users.FirstAsync();
+            Assert.Null(savedUser.Address);
+        }
+
+        [Fact]
+        public async Task AddAsync_ShouldFail_WhenEmailIsInvalid()
+        {
+            // Arrange
+            var hashedPassword = "hashed_password";
+            _mockPasswordHasher
+                .Setup(ph => ph.Hash(It.IsAny<string>()))
+                .Returns(hashedPassword);
+
+            var user = new User
+            {
+                Username = "TestUser",
+                Email = "invalid-email", // Invalid email
+                HashedPass = hashedPassword
+            };
+
+            // Act
+            var response = await _userRepo.AddAsync(user);
+
+            // Assert
+            Assert.False(response.Flag);
+            Assert.Equal($"Invalid email address format: {user.Email}", response.Message);
         }
     }
 }
