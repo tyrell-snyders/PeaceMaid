@@ -8,6 +8,7 @@ using PeaceMaid.Infrastructure.Implementation;
 using PeaceMaid.Infrastructure.Middleware;
 using Microsoft.EntityFrameworkCore;
 using PeaceMaid.Application.Interfaces.Authentication;
+using Microsoft.Extensions.Configuration;
 
 
 namespace PeaceMaid.Tests.Infrastructure.Implementaion
@@ -21,20 +22,27 @@ namespace PeaceMaid.Tests.Infrastructure.Implementaion
 
         public UserRepoTests()
         {
-            // in-memory db
+            // In-memory db
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDB")
-                .EnableSensitiveDataLogging() // Enable detailed logging
+                .EnableSensitiveDataLogging()
                 .Options;
-            _dbContext  = new AppDbContext(options);
+            _dbContext = new AppDbContext(options);
 
             // Mock dependencies
-            _mockPasswordHasher = new Mock<IPasswordHasher>();
-            _mockUserAuth = new Mock<UserAuth>();
+            var inMemorySettings = new Dictionary<string, string>
+            {
+                { "JwtSettings:SecurityKey", "MySuperSecretSecurityKey" }
+            };
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
 
             // Initialize UserRepo
-            _userRepo = new UserRepo(_dbContext, _mockPasswordHasher.Object, _mockUserAuth.Object);
+            _userRepo = new UserRepo(_dbContext, _mockPasswordHasher.Object, _mockUserAuth.Object, configuration);
         }
+
 
         // Tests
         [Fact]
