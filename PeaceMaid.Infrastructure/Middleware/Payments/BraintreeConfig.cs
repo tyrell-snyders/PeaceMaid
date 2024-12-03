@@ -10,11 +10,11 @@ namespace PeaceMaid.Infrastructure.Middleware.Payments
         public BraintreeConfig(IConfiguration configuration)
         {
             Gateway = new BraintreeGateway(
-                    configuration["Braintree:Environment"],
-                    configuration["Braintree:MerchantId"],
-                    configuration["Braintree:PublicKey"],
-                    configuration["Braintree:PrivateKey"]
-                );
+                configuration["Braintree:Environment"],
+                configuration["Braintree:MerchantId"],
+                configuration["Braintree:PublicKey"],
+                configuration["Braintree:PrivateKey"]
+            );
         }
     }
 }
