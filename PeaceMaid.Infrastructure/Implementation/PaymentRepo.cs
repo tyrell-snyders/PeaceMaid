@@ -4,7 +4,6 @@ using PeaceMaid.Application.DTOs;
 using PeaceMaid.Application.Interfaces;
 using PeaceMaid.Domain.Entities;
 using PeaceMaid.Infrastructure.Data;
-using PeaceMaid.Infrastructure.Middleware.Payments;
 using BraintreeService = PeaceMaid.Infrastructure.Middleware.Payments.BraintreeService;
 using PaymentMethod = PeaceMaid.Domain.Entities.PaymentMethod;
 
@@ -44,6 +43,8 @@ namespace PeaceMaid.Infrastructure.Implementation
                               .ToHashSet();
             return await Task.FromResult(paymentMethods);
         }
+
+        public string? GenerateClientToken() => _braintreeService.GenereteClientToken();
 
         public async Task<PaymentResponse> PayAsync(int id, string nonce)
         {

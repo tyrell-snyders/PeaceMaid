@@ -25,6 +25,7 @@ namespace PeaceMaid.Infrastructure
             services.AddScoped<IPayment, PaymentRepo>();
             services.AddScoped<IReview, ReviewRepo>();
             services.AddSingleton<BraintreeConfig>();
+            services.AddSingleton<BraintreeService>();
 
             // JWT auth
             var securityKey = configuration["JwtSettings:SecurityKey"];

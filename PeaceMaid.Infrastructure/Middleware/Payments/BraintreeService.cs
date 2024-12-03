@@ -33,7 +33,11 @@ namespace PeaceMaid.Infrastructure.Middleware.Payments
             }
 
             var errMessage = string.Join(", ", result.Errors.DeepAll().Select(e => e.Message));
+
+            var clientToken = _gateway.ClientToken.Generate();
             return new(false, $"Payment failed: {errMessage}", null);
         }
+
+        public string? GenereteClientToken() => _gateway.ClientToken.Generate();
     }
 }

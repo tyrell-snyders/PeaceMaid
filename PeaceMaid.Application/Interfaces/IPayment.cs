@@ -8,5 +8,6 @@ namespace PeaceMaid.Application.Interfaces
         Task<PaymentResponse> PayAsync(int id, string nonce);
         Task<ServiceResponse> CancelAsync(int id);
         Task<HashSet<string>> GetPaymentMethodsAsync();
+        string? GenerateClientToken();
     }
 }
