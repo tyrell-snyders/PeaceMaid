@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using PeaceMaid.Infrastructure.Middleware;
 using Microsoft.Extensions.Configuration;
+using PeaceMaid.Infrastructure.Middleware.Payments;
 
 namespace PeaceMaid.Infrastructure
 {
@@ -23,6 +24,7 @@ namespace PeaceMaid.Infrastructure
             services.AddScoped<IBooking, BookingRepo>();
             services.AddScoped<IPayment, PaymentRepo>();
             services.AddScoped<IReview, ReviewRepo>();
+            services.AddSingleton<BraintreeConfig>();
 
             // JWT auth
             var securityKey = configuration["JwtSettings:SecurityKey"];

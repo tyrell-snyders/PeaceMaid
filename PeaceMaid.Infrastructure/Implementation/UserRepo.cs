@@ -45,6 +45,8 @@ namespace PeaceMaid.Infrastructure.Implementation
             await _context.Users.AddAsync(newUser);
             await SaveChangesAsync();
 
+            // Todo: Create a verification token and send an email to the user to verify their email
+
             return new ServiceResponse(true, "Added");
         }
 
@@ -87,7 +89,5 @@ namespace PeaceMaid.Infrastructure.Implementation
         }
 
         private async Task SaveChangesAsync() => await _context.SaveChangesAsync();
-
-        
     }
 }
