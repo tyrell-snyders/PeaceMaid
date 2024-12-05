@@ -10,7 +10,7 @@ namespace PeaceMaid.Application.Services
 
         public async Task<ServiceResponse> AddAsync(User user)
         {
-            var data = await _httpClient.PostAsJsonAsync("api/User", user);
+            var data = await _httpClient.PostAsJsonAsync("api/User/register", user);
             if (!data.IsSuccessStatusCode)
                 return new ServiceResponse(false, $"Request failed with status code: {data.StatusCode}");
 
@@ -41,6 +41,18 @@ namespace PeaceMaid.Application.Services
 
         public async Task<User> GetByIdAsync(int Id) =>
             await _httpClient.GetFromJsonAsync<User>($"api/User/{Id}")!;
+
+        public async Task<string> LoginAsync(UserDTO user)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/User/login", user);
+            if (!response.IsSuccessStatusCode)
+            {
+                return $"Login failed: {response.ReasonPhrase}";
+            }
+
+            var token = await response.Content.ReadAsStringAsync();
+            return token ?? "Invalid login response.";
+        }
 
         public async Task<ServiceResponse> UpdateAsync(User user)
         {

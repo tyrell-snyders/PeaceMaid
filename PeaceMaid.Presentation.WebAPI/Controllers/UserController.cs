@@ -85,8 +85,15 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]UserDTO userDTO)
         {
+            if (userDTO == null || string.IsNullOrWhiteSpace(userDTO.Email) || string.IsNullOrWhiteSpace(userDTO.Password))
+                return BadRequest("Username and Password are required.");
+
             var result = await _user.LoginAsync(userDTO);
-            return Ok(result);
+
+            if (result.Contains("Not Logged in"))
+                return Unauthorized("Invalid email or password.");
+
+            return Ok(new { Data =  result });
         }
     }
 }

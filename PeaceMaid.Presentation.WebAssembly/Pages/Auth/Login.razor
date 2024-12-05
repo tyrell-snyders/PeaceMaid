@@ -1,0 +1,68 @@
+﻿@page "/login" 
+
+@using NetcodeHub.Packages.Components.Toast
+@using PeaceMaid.Application.Services
+@using PeaceMaid.Domain.Entities
+@using PeaceMaid.Application.DTOs
+@using NetcodeHub.Packages.Components.Validations.OnInput
+
+@inject IUserService userService
+
+<PageTitle>Login</PageTitle>
+
+<div class="row">
+    <div class="col-lg-6">
+        <EditForm Model="loginUser" OnValidSubmit="UserLogin">
+            <DataAnnotationsValidator />
+            <FloatingText @bind-Value="loginUser.Email" Label="Email" Placeholder="john-doe@gmail.com" class="mb-3 form-control" />
+            <ValidationMessage For="() => loginUser.Email" />
+            <FloatingText @bind-Value="loginUser.Password" Label="Password" Type="Password" class="mb-3 form-control" />
+            <ValidationMessage For="() => loginUser.Password" />
+
+            <button class="btn btn-primary mt-5 mb-5" type="submit">Login</button>
+        </EditForm>
+    </div>
+</div>
+
+<NetcodeHubToast @ref="toastComp"
+IconClass="bi bi-check"
+Persist="false"
+Duration="duration" />
+
+@code {
+    NetcodeHubToast? toastComp;
+    int duration = 4000;
+
+    /// <summary>
+    /// Model for login
+    /// </summary>
+    UserDTO loginUser = new UserDTO
+    {
+        Email = string.Empty,
+        Password = string.Empty
+    };
+
+    /// <summary>
+    /// Method to handle the login process
+    /// </summary>
+    async Task UserLogin()
+    {
+        if (string.IsNullOrWhiteSpace(loginUser.Email) || string.IsNullOrWhiteSpace(loginUser.Password))
+        {
+            duration = 5000;
+            await toastComp.ShowErrorToast("Alert", "Please fill in both Username and Password.");
+            return;
+        }
+
+        var result = await userService.LoginAsync(loginUser);
+        if (result.Contains("Not logged in"))
+        {
+            duration = 5000;
+            await toastComp.ShowErrorToast("Error", result);
+            return;
+        }
+
+        await toastComp.ShowSuccessToast("Success", "Logged in successfully!");
+        // Redirect to another page or handle successful login logic
+    }
+}

@@ -11,5 +11,6 @@ namespace PeaceMaid.Application.Interfaces
         Task<List<User>> GetAllAsync();
         Task<User> GetByIdAsync(int Id);
         Task<String> LoginAsync(UserDTO userDTO);
+        Task<User?> GetByEmailAsync(string Email);
     }                                             
 }
