@@ -22,25 +22,22 @@ namespace PeaceMaid.Tests.Infrastructure.Implementaion
 
         public UserRepoTests()
         {
-            // In-memory db
+            // In-memory DbContext
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDB")
-                .EnableSensitiveDataLogging()
+                .UseInMemoryDatabase("TestDB")
                 .Options;
             _dbContext = new AppDbContext(options);
 
             // Mock dependencies
-            var inMemorySettings = new Dictionary<string, string>
-            {
-                { "JwtSettings:SecurityKey", "MySuperSecretSecurityKey" }
-            };
+            _mockPasswordHasher = new Mock<IPasswordHasher>();
+            _mockUserAuth = new Mock<UserAuth>();
 
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(inMemorySettings)
-                .Build();
+            // Mock IConfiguration
+            var mockConfiguration = new Mock<IConfiguration>();
+            mockConfiguration.Setup(config => config["JwtSettings:SecurityKey"]).Returns("TestKey123");
 
             // Initialize UserRepo
-            _userRepo = new UserRepo(_dbContext, _mockPasswordHasher.Object, _mockUserAuth.Object, configuration);
+            _userRepo = new UserRepo(_dbContext, _mockPasswordHasher.Object, _mockUserAuth.Object, mockConfiguration.Object);
         }
 
 
