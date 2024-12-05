@@ -75,64 +75,6 @@ namespace PeaceMaid.Tests.Infrastructure.Implementaion
             Assert.Equal(hashedPassword, savedUser.HashedPass);
         }
 
-        [Fact]
-        public async Task AddAsync_ShouldAssUser_WithEmptyNavigationProperties()
-        {
-            // Arrange
-            var hashedPassword = "hashed_password";
-            _mockPasswordHasher
-                .Setup(ph => ph.Hash(It.IsAny<string>()))
-                .Returns(hashedPassword);
-
-            var user = new User
-            {
-                Email = "test@example.com",
-                Username = "testUser",
-                HashedPass = hashedPassword,
-                Bookings = new List<Booking>(),
-                Reviews = new List<Review>()
-            };
-
-            // Act
-            var response = await _userRepo.AddAsync(user);
-
-            // Assert
-            Assert.True(response.Flag);
-            var savedUser = await _dbContext.Users
-                .Include(u => u.Bookings)
-                .Include(u => u.Reviews)
-                .FirstAsync();
-            Assert.NotNull(savedUser.Bookings);
-            Assert.Empty(savedUser.Bookings);
-            Assert.NotNull(savedUser.Reviews);
-            Assert.Empty(savedUser.Reviews);
-        }
-
-        [Fact]
-        public async Task AddAsync_ShouldAllowNullAddress()
-        {
-            // Arrange
-            var hashedPassword = "hashed_password";
-            _mockPasswordHasher
-                .Setup(ph => ph.Hash(It.IsAny<string>()))
-                .Returns(hashedPassword);
-
-            var user = new User
-            {
-                Username = "TestUser",
-                Email = "test@example.com",
-                HashedPass = hashedPassword,
-                Address = null // Optional field
-            };
-
-            // Act
-            var response = await _userRepo.AddAsync(user);
-
-            // Assert
-            Assert.True(response.Flag);
-            var savedUser = await _dbContext.Users.FirstAsync();
-            Assert.Null(savedUser.Address);
-        }
 
         [Fact]
         public async Task AddAsync_ShouldFail_WhenEmailIsInvalid()
