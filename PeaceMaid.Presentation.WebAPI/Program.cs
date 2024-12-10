@@ -3,6 +3,7 @@ using Microsoft.Net.Http.Headers;
 using PeaceMaid.Infrastructure.Data;
 using PeaceMaid.Infrastructure;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using PeaceMaid.Presentation.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Swagger configuration
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "PeaceMaid API", Version = "v1" });
 
-    // Security
+    // Add JWT Bearer token support
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -25,8 +28,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Enter 'Bearer' followed by a space and your JWT token"
     });
 
-    // Apply Bearer Token conditionally
-    c.OperationFilter<AuthorizeCheckOperationFilter>();
+    // Only apply security requirement to endpoints with [Authorize]
+    c.OperationFilter<SwaggerFileOperationFilter>();
 });
 
 // DB

@@ -10,13 +10,24 @@ namespace PeaceMaid.Infrastructure.Implementation
     {
         private readonly AppDbContext _context = appDbContext;
 
-        public async Task<ServiceResponse> AddAsync(ServiceProvider serviceProvider)
+        public async Task<ServiceResponse> AddAsync(ServiceProviderDTO serviceProviderDTO)
         {
+            var serviceProvider = new ServiceProvider
+            {
+                ServiceDescription = serviceProviderDTO.ServiceDescription,
+                Rating = serviceProviderDTO.Rating,
+                Availability = serviceProviderDTO.Availability,
+                UserId = serviceProviderDTO.UserId,
+                ProfilePicture = serviceProviderDTO.ProfilePicture,
+                Address = serviceProviderDTO.Address
+            };
+
             await _context.ServiceProviders.AddAsync(serviceProvider);
             await SaveChangesAsync();
 
-            return new(true, "Added");
+            return new ServiceResponse(true, "Added");
         }
+
 
         public async Task<ServiceResponse> DeleteAsync(int Id)
         {

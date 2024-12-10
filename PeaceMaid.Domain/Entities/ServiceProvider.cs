@@ -7,7 +7,7 @@ namespace PeaceMaid.Domain.Entities
         public int Id { get; set; }
         required public string ServiceDescription { get; set; }
         public decimal Rating { get; set; }
-        public byte ProfilePicture { get; set; }
+        public byte[] ProfilePicture { get; set; } = [];
         required public string Availability { get; set; }
 
         // Optional

@@ -1,0 +1,121 @@
+﻿@page "/services/service-providers"
+
+@using BlazorBootstrap
+@using PeaceMaid.Application.Services.ServiceProviders
+@using PeaceMaid.Domain.Entities
+@using PeaceMaid.Application.DTOs
+@using NetcodeHub.Packages.Components.Validations.OnInput
+@using System.Net.Http.Headers
+
+@inject ISvcProviderService iSvcProviderService
+@inject NavigationManager NavigationManager
+
+<h3>Service Providers</h3>
+
+<Modal @ref="modal" title="Register as service provider" IsVerticallyCentered="true" IsScrollable="true">
+    <BodyTemplate>
+        <EditForm Model="sProvider" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div>
+                <label for="userId">UserId:</label>
+                <InputNumber id="userId" @bind-Value="sProvider.UserId" />
+            </div>
+
+            <div>
+                <label for="serviceDescription">Service Description</label>
+                <FloatingText id="serviceDescription" @bind-Value="sProvider.ServiceDescription" />
+            </div>
+
+            <div>
+                <label for="rating">Rating:</label>
+                <InputNumber id="rating" @bind-Value="sProvider.Rating" />
+            </div>
+
+            <div>
+                <label for="availability">Availability:</label>
+                <InputText id="availability" @bind-Value="sProvider.Availability" />
+            </div>
+
+            <div>
+                <label for="profilePicture">Profile Picture:</label>
+                <InputFile OnChange="HandleFileSelected" />
+            </div>
+        </EditForm>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideModal">Close</Button>
+        <Button Color="ButtonColor.Primary">Add Service Provider</Button>
+    </FooterTemplate>
+</Modal>
+
+<Button Color="ButtonColor.Primary" @onclick="OnShowModal" class="float-right">Vertically centered scrollable modal</Button>
+
+
+<div class="col-lg-6">
+
+</div>
+
+@if (!string.IsNullOrEmpty(Message))
+{
+    <p>@Message</p>
+}
+
+@code {
+    //modal
+    private Modal modal = default;
+
+    private async Task OnShowModal() 
+    {
+        await modal.ShowAsync();
+    }
+
+    private async Task OnHideModal() 
+    {
+        await modal.HideAsync();
+    }
+
+    private ServiceProviderDTO sProvider = new ServiceProviderDTO
+    { 
+        Id = 0,
+        ServiceDescription = string.Empty,
+        Rating = 0,
+        Availability = string.Empty,
+        UserId = 0,
+        ProfilePicture = [],
+    };
+    private IBrowserFile SelectedFile;
+    private string Message = string.Empty;
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        SelectedFile = e.File;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (SelectedFile != null)
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(sProvider.ServiceDescription), "ServiceDescription");
+            content.Add(new StringContent(sProvider.Rating.ToString()), "Rating");
+            content.Add(new StringContent(sProvider.Availability), "Availability");
+
+            var fileContent = new StreamContent(SelectedFile.OpenReadStream(5120000));
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(SelectedFile.ContentType);
+            content.Add(fileContent, "profilePicture", SelectedFile.Name);
+
+            var result = await iSvcProviderService.AddAsync(sProvider, content);
+
+            Message = result.Message;
+            if (result.Flag)
+            {
+                NavigationManager.NavigateTo("/services/service-providers");
+            }
+        }
+        else
+        {
+            Message = "Please upload a profile picture.";
+        }
+    }
+}

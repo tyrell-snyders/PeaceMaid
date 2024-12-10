@@ -7,39 +7,47 @@
 
 <h3>Our Services</h3>
 
-@if (isLoading)
-{
-    <div class="loading-container">
-        <div class="spinner"></div>
-        <p>Loading services, please wait...</p>
+<div class="services-container">
+    @if (isLoading)
+    {
+        <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Loading services, please wait...</p>
+        </div>
+    }
+    else if (fetchError != null)
+    {
+        <div class="error-container">
+            <p class="error-message">Oops! Something went wrong: @fetchError</p>
+        </div>
+    }
+    else if (services == null || !services.Any())
+    {
+        <p>No services are available at the moment. Please check back later!</p>
+    }
+    else
+    {
+        <ul class="service-list">
+            @foreach (var service in services)
+            {
+                <li>
+                    <strong>@service.Name:</strong> @service.Description (Price: @service.Price:C)
+                </li>
+            }
+        </ul>
+    }
+
+    <div class="service-add container">
+        <button class="btn-primary">+</button>
     </div>
-}
-else if (fetchError != null)
-{
-    <div class="error-container">
-        <p class="error-message">Oops! Something went wrong: @fetchError</p>
-    </div>
-}
-else if (services == null || !services.Any())
-{
-    <p>No services are available at the moment. Please check back later!</p>
-}
-else
-{
-    <ul class="service-list">
-        @foreach (var service in services)
-        {
-            <li>
-                <strong>@service.Name:</strong> @service.Description (Price: @service.Price:C)
-            </li>
-        }
-    </ul>
-}
+</div>
 
 @code {
     private List<Service>? services;
     private bool isLoading = true;
     private string? fetchError;
+    private bool isModalOpen = false;
+
 
     // Fetch services when the page initializes
     protected override async Task OnInitializedAsync()
@@ -56,5 +64,34 @@ else
         {
             isLoading = false;
         }
+    }
+
+    // Add Services Modal
+    private void ShowModal() 
+    {
+        isModalOpen = true;
+    }
+
+    private void CloseModal() 
+    {
+        isModalOpen = false;
+    }
+
+    private async Task AddService() 
+    {
+        // try 
+        // {
+        //     var newService = new Service 
+        //     { 
+        //         Name
+        //     };
+        //     await svcsService.AddAsync(newService);
+        //     services?.Add(newService);
+        //     CloseModal();
+        // } 
+        // catch (Exception e) 
+        // {
+        //     fetchError = e.Message;
+        // }
     }
 }

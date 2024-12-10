@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PeaceMaid.Application.DTOs;
 using PeaceMaid.Application.Interfaces;
 using ServiceProvider = PeaceMaid.Domain.Entities.ServiceProvider;
 
@@ -21,12 +22,19 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Post([FromBody] ServiceProvider sProviderDTO)
+        public async Task<IActionResult> Post([FromForm] ServiceProviderDTO serviceProviderDTO, IFormFile profilePicture)
         {
-            if (sProviderDTO == null)
-                return BadRequest("Data of type null cannot be accepted.");
+            if (serviceProviderDTO == null)
+                return BadRequest("Service provider data cannot be null.");
 
-            var result = await _sProvider.AddAsync(sProviderDTO);
+            if (profilePicture != null && profilePicture.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                await profilePicture.CopyToAsync(memoryStream);
+                serviceProviderDTO.ProfilePicture = memoryStream.ToArray();
+            }
+
+            var result = await _sProvider.AddAsync(serviceProviderDTO);
             return Ok(result);
         }
 

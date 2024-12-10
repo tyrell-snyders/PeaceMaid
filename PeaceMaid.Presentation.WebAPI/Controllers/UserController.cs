@@ -104,7 +104,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
 
             Response.Cookies.Append("authToken", result, cookieOptions);
 
-            return Ok(new { message =  "Login Successful" });
+            return Ok(new { message =  "Login Successful", auth = result });
         }
     }
 }
