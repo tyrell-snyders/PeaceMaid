@@ -46,6 +46,9 @@ namespace PeaceMaid.Infrastructure.Implementation
         public async Task<ServiceProvider?> GetProviderAsync(int userId)
             => await _context.ServiceProviders.FirstOrDefaultAsync(x => x.UserId == userId);
 
+        public async Task<List<Service>> GetServicesAsync(int spId)
+            => await _context.Services.Where(x => x.ServiceProviderId == spId).ToListAsync();
+
         public async Task<ServiceResponse> UpdateAsync(ServiceProvider serviceProvider)
         {
             _context.ServiceProviders.Update(serviceProvider);

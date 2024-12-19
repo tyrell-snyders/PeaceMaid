@@ -45,6 +45,13 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
             return Ok(data);
         }
 
+        [HttpGet("services/{spId}")]
+        public async Task<IActionResult> GetServices(int spId)
+        {
+            var data = await _sProvider.GetServicesAsync(spId);
+            return Ok(data);
+        }
+
         [HttpPut("update")]
         [Authorize]
         public async Task<IActionResult> Update([FromBody] ServiceProvider sProviderDTO)

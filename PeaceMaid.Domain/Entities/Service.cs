@@ -1,4 +1,6 @@
-﻿namespace PeaceMaid.Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace PeaceMaid.Domain.Entities
 {
     public class Service
     {
@@ -10,6 +12,7 @@
         public string? Description { get; set; }
 
         // Navigation Properties
+        [JsonIgnore]
         public ServiceProvider? ServiceProvider { get; set; }
     }
 }
