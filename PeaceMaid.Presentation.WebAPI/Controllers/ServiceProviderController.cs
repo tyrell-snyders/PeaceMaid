@@ -21,7 +21,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> Post([FromForm] ServiceProviderDTO serviceProviderDTO, IFormFile profilePicture)
         {
             if (serviceProviderDTO == null)

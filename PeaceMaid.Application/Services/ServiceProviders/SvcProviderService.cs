@@ -35,6 +35,9 @@ namespace PeaceMaid.Application.Services.ServiceProviders
             throw new NotImplementedException();
         }
 
+        public async Task<List<Service>> GetServicesByProvider(int providerId) =>
+            await _client.GetFromJsonAsync<List<Service>>($"api/ServiceProvider/services{providerId}");
+
         public Task<ServiceResponse> UpdateAsync(ServiceProviderDTO serviceProviderDTO)
         {
             throw new NotImplementedException();

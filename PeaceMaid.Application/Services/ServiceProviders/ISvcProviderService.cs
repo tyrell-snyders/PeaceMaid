@@ -1,10 +1,5 @@
 ﻿using PeaceMaid.Application.DTOs;
 using PeaceMaid.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PeaceMaid.Application.Services.ServiceProviders
 {
@@ -15,5 +10,6 @@ namespace PeaceMaid.Application.Services.ServiceProviders
         Task<List<ServiceProvider>> GetAsync();
         Task<ServiceResponse> UpdateAsync(ServiceProviderDTO serviceProviderDTO);
         Task<ServiceProvider?> GetProviderAsync(int userId);
+        Task<List<Service>> GetServicesByProvider(int providerId);
     }
 }

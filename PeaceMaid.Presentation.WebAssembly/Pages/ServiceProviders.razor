@@ -12,6 +12,7 @@
 
 <h3>Service Providers</h3>
 
+
 <Modal @ref="modal" title="Register as service provider" IsVerticallyCentered="true" IsScrollable="true">
     <BodyTemplate>
         <EditForm Model="sProvider" OnValidSubmit="HandleValidSubmit">
@@ -45,16 +46,29 @@
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="OnHideModal">Close</Button>
-        <Button Color="ButtonColor.Primary">Add Service Provider</Button>
+        <Button Color="ButtonColor.Primary" @onclick="HandleValidSubmit">Register</Button>
     </FooterTemplate>
 </Modal>
 
-<Button Color="ButtonColor.Primary" @onclick="OnShowModal" class="float-right">Vertically centered scrollable modal</Button>
 
 
-<div class="col-lg-6">
-
+<div class="col-lg-6 container">
+    @foreach (ServiceProvider srvProvider in serviceProviders)
+    {
+        <div class="service-card mb-5 mt-5 rounded mx-auto border-5 border-primary">
+            <img src="@ProfilePicture(srvProvider.ProfilePicture)"
+                 class="card-img-top"
+                 alt="profile picture">
+            <div class="card-body">
+                <h5 class="card-subtitle">Rating: @srvProvider.Rating</h5>
+                <p class="card-text">@srvProvider.ServiceDescription</p>
+            </div>
+        </div>
+    }
 </div>
+
+<Button Color="ButtonColor.Primary" @onclick="OnShowModal" class="float-right">Register as A Service Provider</Button>
+
 
 @if (!string.IsNullOrEmpty(Message))
 {
@@ -62,6 +76,33 @@
 }
 
 @code {
+    //Get Service Providers
+    private List<ServiceProvider> serviceProviders = new List<ServiceProvider>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProviders();
+    }
+
+    private async Task LoadProviders() 
+    {
+        try 
+        {
+            serviceProviders = await iSvcProviderService.GetAsync();
+        } 
+        catch (Exception e)
+        {
+            Message = $"Error loading service providers: {e.Message}";
+        }
+    }
+
+    /// <summary>
+    /// Convert from byte[] to string
+    /// </summary>
+    /// <param name="image"
+    private static string ProfilePicture(byte[] image) => 
+        $"data:image/jpeg;base64,{Convert.ToBase64String(image)}";
+
     //modal
     private Modal modal = default;
 
