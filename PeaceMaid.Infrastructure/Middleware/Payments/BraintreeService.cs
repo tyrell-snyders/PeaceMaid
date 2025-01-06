@@ -12,7 +12,7 @@ namespace PeaceMaid.Infrastructure.Middleware.Payments
             _gateway = conf.Gateway;
         }
 
-        public async Task<PaymentResponse> ProcessPaymentAsync(decimal amount, string nonce)
+        public async Task<DataResponse> ProcessPaymentAsync(decimal amount, string nonce)
         {
             // create a transaction
             var request = new TransactionRequest

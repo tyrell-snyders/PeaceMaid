@@ -10,7 +10,7 @@ namespace PeaceMaid.Application.Interfaces
         Task<ServiceResponse> DeleteAsync(int Id);
         Task<List<User>> GetAllAsync();
         Task<User> GetByIdAsync(int Id);
-        Task<String> LoginAsync(UserDTO userDTO);
+        Task<DataResponse> LoginAsync(UserDTO userDTO);
         Task<User?> GetByEmailAsync(string Email);
     }                                             
 }

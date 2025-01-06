@@ -10,6 +10,8 @@ namespace PeaceMaid.Application.Services
         Task<ServiceResponse> DeleteAsync(int Id);
         Task<List<User>> GetAllAsync();
         Task<User> GetByIdAsync(int Id);
-        Task<string> LoginAsync(UserDTO user);
+        Task<LoginResponse> LoginAsync(UserDTO user);
+        Task Logout();
+        Task<bool> IsSessionValid();
     }
 }

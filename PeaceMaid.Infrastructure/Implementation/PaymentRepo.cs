@@ -46,7 +46,7 @@ namespace PeaceMaid.Infrastructure.Implementation
 
         public string? GenerateClientToken() => _braintreeService.GenereteClientToken();
 
-        public async Task<PaymentResponse> PayAsync(int id, string nonce)
+        public async Task<DataResponse> PayAsync(int id, string nonce)
         {
             //Todo: Use Braintree API to handle payment methods
             var payment = await _context.Payments

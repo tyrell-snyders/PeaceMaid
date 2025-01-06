@@ -43,6 +43,17 @@ Duration="duration" />
         Password = string.Empty
     };
 
+    protected override async void OnInitialized()
+    {
+        if (!await userService.IsSessionValid())
+        {
+            duration = 5000;
+            await toastComp.ShowErrorToast("Session Expired", "Your session has expired. Please log in again.");
+            navigationManager.NavigateTo("/login");
+
+        }
+    }
+
     /// <summary>
     /// Method to handle the login process
     /// </summary>
@@ -56,10 +67,11 @@ Duration="duration" />
         }
 
         var result = await userService.LoginAsync(loginUser);
-        if (result.Contains("Not logged in"))
+        Console.WriteLine(result);
+        if (result.Message.Contains("Not logged in"))
         {
             duration = 5000;
-            await toastComp.ShowErrorToast("Error", result);
+            await toastComp.ShowErrorToast("Error", result.Message);
             return;
         }
 

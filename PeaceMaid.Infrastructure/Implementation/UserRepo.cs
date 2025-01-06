@@ -74,18 +74,22 @@ namespace PeaceMaid.Infrastructure.Implementation
             return new ServiceResponse(true, "Updated");
         }
 
-        public async Task<string> LoginAsync(UserDTO userDTO)
+        public async Task<DataResponse> LoginAsync(UserDTO userDTO)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
 
             if (user == null || !Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                return user == null ? "Not logged in" : $"Invalid email address format: {user.Email}";
+                return new DataResponse(false, user == null ? "Not logged in" : $"Invalid email address format: {user.Email}", null);
             }
 
-            return _passwordHasher.Verify(userDTO.Password, user.HashedPass)
-                ? _userAuth.CreateToken(user, configuration)
-                : "Not logged in";
+            if (_passwordHasher.Verify(userDTO.Password, user.HashedPass))
+            {
+                var responseData = new { UserID = user.Id, Username = user.Username, Token = _userAuth.CreateToken(user, _configuration) };
+                return new DataResponse(true, "Logged in", responseData);
+            }
+
+            return new DataResponse(false, "Invalid credentials", null);
         }
 
         private async Task SaveChangesAsync() => await _context.SaveChangesAsync();

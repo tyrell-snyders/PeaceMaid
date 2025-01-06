@@ -90,21 +90,28 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
 
             var result = await _user.LoginAsync(userDTO);
 
-            if (result.Contains("Not Logged in"))
+            if (result.Message.Contains("Not Logged in"))
                 return Unauthorized("Invalid credentials");
 
-            // Handle Cookies
-            var cookieOptions = new CookieOptions
+            var data  = result.Data;
+            var token = data.GetType().GetProperty("Token")?.GetValue(data, null).ToString();
+
+            if (token != null)
             {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(7)
-            };
+                // Handle Cookies
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddDays(7)
+                };
 
-            Response.Cookies.Append("authToken", result, cookieOptions);
+                Response.Cookies.Append("authToken", token, cookieOptions);
+            }
 
-            return Ok(new { message =  "Login Successful", auth = result });
+
+            return Ok(data);
         }
     }
 }
