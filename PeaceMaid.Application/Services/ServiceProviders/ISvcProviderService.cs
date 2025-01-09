@@ -5,7 +5,7 @@ namespace PeaceMaid.Application.Services.ServiceProviders
 {
     public interface ISvcProviderService
     {
-        Task<ServiceResponse> AddAsync(ServiceProviderDTO serviceProviderDTO, MultipartFormDataContent content);
+        Task<ServiceResponse> AddAsync(StringContent? content);
         Task<ServiceResponse> DeleteAsync(int Id);
         Task<List<ServiceProvider>> GetAsync();
         Task<ServiceResponse> UpdateAsync(ServiceProviderDTO serviceProviderDTO);

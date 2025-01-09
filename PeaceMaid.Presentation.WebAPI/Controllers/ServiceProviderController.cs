@@ -21,22 +21,16 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPost]
-        
-        public async Task<IActionResult> Post([FromForm] ServiceProviderDTO serviceProviderDTO, IFormFile profilePicture)
+
+        public async Task<IActionResult> Post([FromForm] ServiceProviderDTO serviceProviderDTO)
         {
             if (serviceProviderDTO == null)
                 return BadRequest("Service provider data cannot be null.");
 
-            if (profilePicture != null && profilePicture.Length > 0)
-            {
-                using var memoryStream = new MemoryStream();
-                await profilePicture.CopyToAsync(memoryStream);
-                serviceProviderDTO.ProfilePicture = memoryStream.ToArray();
-            }
-
             var result = await _sProvider.AddAsync(serviceProviderDTO);
             return Ok(result);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProvider(int id)

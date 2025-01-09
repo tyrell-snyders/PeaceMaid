@@ -6,6 +6,8 @@
 @using PeaceMaid.Application.DTOs
 @using NetcodeHub.Packages.Components.Validations.OnInput
 @using System.Net.Http.Headers
+@using System.Text.Json
+@using System.Text
 
 @inject ISvcProviderService iSvcProviderService
 @inject NavigationManager NavigationManager
@@ -57,8 +59,8 @@
     {
         <div class="service-card mb-5 mt-5 rounded mx-auto border-5 border-primary">
             <img src="@ProfilePicture(srvProvider.ProfilePicture)"
-                 class="card-img-top"
-                 alt="profile picture">
+            class="card-img-top"
+            alt="profile picture">
             <div class="card-body">
                 <h5 class="card-subtitle">Rating: @srvProvider.Rating</h5>
                 <p class="card-text">@srvProvider.ServiceDescription</p>
@@ -118,7 +120,6 @@
 
     private ServiceProviderDTO sProvider = new ServiceProviderDTO
     { 
-        Id = 0,
         ServiceDescription = string.Empty,
         Rating = 0,
         Availability = string.Empty,
@@ -137,21 +138,27 @@
     {
         if (SelectedFile != null)
         {
-            var content = new MultipartFormDataContent();
-            content.Add(new StringContent(sProvider.ServiceDescription), "ServiceDescription");
-            content.Add(new StringContent(sProvider.Rating.ToString()), "Rating");
-            content.Add(new StringContent(sProvider.Availability), "Availability");
+            byte[] fileBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                await SelectedFile.OpenReadStream(5120000).CopyToAsync(memoryStream);
+                fileBytes = memoryStream.ToArray();
+            }
 
-            var fileContent = new StreamContent(SelectedFile.OpenReadStream(5120000));
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(SelectedFile.ContentType);
-            content.Add(fileContent, "profilePicture", SelectedFile.Name);
+            sProvider.ProfilePicture = fileBytes;
+            var jsonString = JsonSerializer.Serialize(sProvider);
+            var jsonContent = new StringContent(JsonSerializer.Serialize(sProvider), Encoding.UTF8, "application/json");
+            Console.WriteLine(jsonString);
+            var response = await iSvcProviderService.AddAsync(jsonContent);
 
-            var result = await iSvcProviderService.AddAsync(sProvider, content);
-
-            Message = result.Message;
-            if (result.Flag)
+            Message = response.Message;
+            if (response.Flag)
             {
                 NavigationManager.NavigateTo("/services/service-providers");
+            }
+            else
+            {
+                Console.WriteLine(response.Message);
             }
         }
         else
@@ -159,4 +166,6 @@
             Message = "Please upload a profile picture.";
         }
     }
+
+
 }

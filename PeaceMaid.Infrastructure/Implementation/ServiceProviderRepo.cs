@@ -12,6 +12,9 @@ namespace PeaceMaid.Infrastructure.Implementation
 
         public async Task<ServiceResponse> AddAsync(ServiceProviderDTO serviceProviderDTO)
         {
+            if (serviceProviderDTO.ProfilePicture == null)
+                return new(false, "Profile picture is required!");
+
             var serviceProvider = new ServiceProvider
             {
                 ServiceDescription = serviceProviderDTO.ServiceDescription,
@@ -21,6 +24,9 @@ namespace PeaceMaid.Infrastructure.Implementation
                 ProfilePicture = serviceProviderDTO.ProfilePicture,
                 Address = serviceProviderDTO.Address
             };
+
+            Console.WriteLine($"ServiceDescription: {serviceProvider.ServiceDescription}");
+            Console.WriteLine($"Availability: {serviceProvider.Availability}");
 
             await _context.ServiceProviders.AddAsync(serviceProvider);
             await SaveChangesAsync();

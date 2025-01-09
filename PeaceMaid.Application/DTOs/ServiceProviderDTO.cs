@@ -5,8 +5,6 @@ namespace PeaceMaid.Application.DTOs
 {
     public class ServiceProviderDTO
     {
-        [JsonIgnore]
-        public int Id { get; set; }
         required public string ServiceDescription { get; set; }
         public decimal Rating { get; set; }
         required public string Availability { get; set; }
