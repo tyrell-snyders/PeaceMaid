@@ -4,6 +4,11 @@
     margin: 40px;
 }
 
+.error-message {
+    margin: 2rem;
+    font-weight: bold;
+    color: red;
+}
 
 .service-card {
     width: 450px;
@@ -27,4 +32,8 @@
     height: 150px;
     object-fit: cover;
     border-radius: 50%;
+}
+
+.float-left {
+    float: right;
 }

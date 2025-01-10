@@ -2,15 +2,13 @@
 using PeaceMaid.Domain.Entities;
 using Microsoft.JSInterop;
 using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text;
 
 namespace PeaceMaid.Application.Services.ServiceProviders
 {
     public class SvcProviderService(HttpClient httpClient, IJSRuntime jSRuntime) : ISvcProviderService
     {
         private readonly HttpClient _client = httpClient;
-        private readonly IJSRuntime _jsRuntime = jSRuntime;
+        private readonly IJSRuntime _jSRuntime = jSRuntime;
 
         public async Task<ServiceResponse> AddAsync(HttpContent content)
         {
@@ -22,7 +20,7 @@ namespace PeaceMaid.Application.Services.ServiceProviders
             }
 
             var error = response.ReasonPhrase;
-            return new(false, error);
+            return new(false, error!);
         }
 
 

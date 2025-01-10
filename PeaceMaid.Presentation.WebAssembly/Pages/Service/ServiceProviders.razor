@@ -1,4 +1,4 @@
-﻿@page "/services/service-providers"
+﻿@page "/service-providers/"
 
 @using BlazorBootstrap
 @using PeaceMaid.Application.Services.ServiceProviders
@@ -53,11 +53,10 @@
 </Modal>
 
 
-
 <div class="col-lg-6 container">
     @foreach (ServiceProvider srvProvider in serviceProviders)
     {
-        <div class="service-card mb-5 mt-5 rounded mx-auto border-5 border-primary">
+        <div accesskey="@srvProvider.Id" class="service-card mb-5 mt-5 rounded mx-auto border-5 border-primary">
             <img src="@ProfilePicture(srvProvider.ProfilePicture)"
             class="card-img-top"
             alt="profile picture">
@@ -65,6 +64,7 @@
                 <h5 class="card-subtitle">Rating: @srvProvider.Rating</h5>
                 <p class="card-text">@srvProvider.ServiceDescription</p>
             </div>
+            <Button Color="ButtonColor.Danger" class="float-left">Delete</Button>
         </div>
     }
 </div>
@@ -74,7 +74,7 @@
 
 @if (!string.IsNullOrEmpty(Message))
 {
-    <p>@Message</p>
+    <p class="error-message">@Message</p>
 }
 
 @code {
@@ -189,7 +189,7 @@
             Message = response.Message;
             if (response.Flag)
             {
-                NavigationManager.NavigateTo("/services/service-providers");
+                NavigationManager.Refresh();
             }
             else
             {

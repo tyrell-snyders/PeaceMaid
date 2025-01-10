@@ -21,6 +21,7 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromForm] ServiceProviderDTO serviceProviderDTO)
         {
             if (serviceProviderDTO == null)

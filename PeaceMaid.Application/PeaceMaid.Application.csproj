@@ -15,4 +15,8 @@
     <ProjectReference Include="..\PeaceMaid.Domain\PeaceMaid.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Auth\" />
+  </ItemGroup>
+
 </Project>
