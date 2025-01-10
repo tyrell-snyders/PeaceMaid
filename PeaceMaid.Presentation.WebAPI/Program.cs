@@ -56,6 +56,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+//app.UseMiddleware<TraceIdLoggerMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

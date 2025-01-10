@@ -10,7 +10,7 @@ namespace PeaceMaid.Infrastructure.Implementation
     {
         private readonly AppDbContext _context = appDbContext;
 
-        public async Task<ServiceResponse> AddAsync(ServiceProviderDTO serviceProviderDTO)
+        public async Task<ServiceResponse> AddAsync(ServiceProviderDTO serviceProviderDTO, byte[] fileBytes)
         {
             if (serviceProviderDTO.ProfilePicture == null)
                 return new(false, "Profile picture is required!");
@@ -21,7 +21,7 @@ namespace PeaceMaid.Infrastructure.Implementation
                 Rating = serviceProviderDTO.Rating,
                 Availability = serviceProviderDTO.Availability,
                 UserId = serviceProviderDTO.UserId,
-                ProfilePicture = serviceProviderDTO.ProfilePicture,
+                ProfilePicture = fileBytes,
                 Address = serviceProviderDTO.Address
             };
 

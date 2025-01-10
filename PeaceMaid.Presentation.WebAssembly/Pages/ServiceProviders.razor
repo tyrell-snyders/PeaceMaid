@@ -124,7 +124,7 @@
         Rating = 0,
         Availability = string.Empty,
         UserId = 0,
-        ProfilePicture = [],
+        ProfilePicture = null,
     };
     private IBrowserFile SelectedFile;
     private string Message = string.Empty;
@@ -136,20 +136,55 @@
 
     private async Task HandleValidSubmit()
     {
+        // JsonContent
+        // if (SelectedFile != null)
+        // {
+        //     byte[] fileBytes;
+        //     using (var memoryStream = new MemoryStream())
+        //     {
+        //         await SelectedFile.OpenReadStream(5120000).CopyToAsync(memoryStream);
+        //         fileBytes = memoryStream.ToArray();
+        //     }
+
+        //     sProvider.ProfilePicture = fileBytes;
+        //     var jsonString = JsonSerializer.Serialize(sProvider);
+        //     var jsonContent = new StringContent(JsonSerializer.Serialize(sProvider), Encoding.UTF8, "application/json");
+        //     Console.WriteLine(jsonString);
+        //     var response = await iSvcProviderService.AddAsync(jsonContent);
+
+        //     Message = response.Message;
+        //     if (response.Flag)
+        //     {
+        //         NavigationManager.NavigateTo("/services/service-providers");
+        //     }
+        //     else
+        //     {
+        //         Console.WriteLine(response.Message);
+        //     }
+        // }
+        // else
+        // {
+        //     Message = "Please upload a profile picture.";
+        // }
+
+        // MultipartFormDataContent
         if (SelectedFile != null)
         {
-            byte[] fileBytes;
+            var formData = new MultipartFormDataContent();
+
             using (var memoryStream = new MemoryStream())
             {
                 await SelectedFile.OpenReadStream(5120000).CopyToAsync(memoryStream);
-                fileBytes = memoryStream.ToArray();
+                var fileBytes = memoryStream.ToArray();
+                formData.Add(new ByteArrayContent(fileBytes), "ProfilePicture", SelectedFile.Name);
             }
 
-            sProvider.ProfilePicture = fileBytes;
-            var jsonString = JsonSerializer.Serialize(sProvider);
-            var jsonContent = new StringContent(JsonSerializer.Serialize(sProvider), Encoding.UTF8, "application/json");
-            Console.WriteLine(jsonString);
-            var response = await iSvcProviderService.AddAsync(jsonContent);
+            formData.Add(new StringContent(sProvider.Availability), "Availability");
+            formData.Add(new StringContent(sProvider.ServiceDescription), "ServiceDescription");
+            formData.Add(new StringContent(sProvider.Rating.ToString()), "Rating");
+            formData.Add(new StringContent(sProvider.UserId.ToString()), "UserId");
+
+            var response = await iSvcProviderService.AddAsync(formData);
 
             Message = response.Message;
             if (response.Flag)

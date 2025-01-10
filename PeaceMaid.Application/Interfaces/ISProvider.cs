@@ -5,7 +5,7 @@ namespace PeaceMaid.Application.Interfaces
 {
     public interface ISProvider
     {
-        Task<ServiceResponse> AddAsync(ServiceProviderDTO serviceProviderDTO);
+        Task<ServiceResponse> AddAsync(ServiceProviderDTO serviceProviderDTO, byte[] fileBytes);
         Task<ServiceResponse> DeleteAsync(int Id);
         Task<List<ServiceProvider>> GetAsync();
         Task<ServiceResponse> UpdateAsync(ServiceProvider serviceProviderDTO);

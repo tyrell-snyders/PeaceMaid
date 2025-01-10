@@ -17,6 +17,12 @@ namespace PeaceMaid.Presentation.WebAPI.Middleware
                 .OfType<AuthorizeAttribute>()
                 .Any();
 
+            var fileParams = context.MethodInfo
+            .GetParameters()
+            .Where(p => p.ParameterType == typeof(IFormFile) ||
+                        p.ParameterType == typeof(IFormFileCollection));
+
+
             if (hasAuthorize)
             {
                 operation.Security = new List<OpenApiSecurityRequirement>
@@ -36,6 +42,30 @@ namespace PeaceMaid.Presentation.WebAPI.Middleware
                         }
                     }
                 };
+
+                if (fileParams.Any())
+                {
+                    operation.RequestBody = new OpenApiRequestBody
+                    {
+                        Content = {
+                            ["multipart/form-data"] = new OpenApiMediaType
+                            {
+                                Schema = new OpenApiSchema
+                                {
+                                    Type = "object",
+                                    Properties = {
+                                        ["ProfilePicture"] = new OpenApiSchema
+                                        {
+                                            Type = "string",
+                                            Format = "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+
+                }
             }
         }
     }

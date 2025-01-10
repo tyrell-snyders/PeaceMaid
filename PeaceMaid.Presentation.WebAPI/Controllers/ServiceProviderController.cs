@@ -21,13 +21,19 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> Post([FromForm] ServiceProviderDTO serviceProviderDTO)
         {
             if (serviceProviderDTO == null)
                 return BadRequest("Service provider data cannot be null.");
 
-            var result = await _sProvider.AddAsync(serviceProviderDTO);
+            if (serviceProviderDTO.ProfilePicture == null)
+                return BadRequest("Profile picture is required!");
+
+            using var memoryStream = new MemoryStream();
+            await serviceProviderDTO.ProfilePicture.CopyToAsync(memoryStream);
+            byte[] fileBytes = memoryStream.ToArray();
+
+            var result = await _sProvider.AddAsync(serviceProviderDTO, fileBytes);
             return Ok(result);
         }
 

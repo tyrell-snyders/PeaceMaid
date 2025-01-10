@@ -1,5 +1,5 @@
-﻿using PeaceMaid.Domain.Entities;
-using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Http;
+using PeaceMaid.Domain.Entities;
 
 namespace PeaceMaid.Application.DTOs
 {
@@ -9,7 +9,7 @@ namespace PeaceMaid.Application.DTOs
         public decimal Rating { get; set; }
         required public string Availability { get; set; }
         required public int UserId { get; set; }
-        required public byte[]? ProfilePicture { get; set; }
+        required public IFormFile ProfilePicture { get; set; }
         public Location? Address { get; set; }
     }
 }

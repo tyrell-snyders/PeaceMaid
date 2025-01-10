@@ -12,7 +12,7 @@ namespace PeaceMaid.Application.Services.ServiceProviders
         private readonly HttpClient _client = httpClient;
         private readonly IJSRuntime _jsRuntime = jSRuntime;
 
-        public async Task<ServiceResponse> AddAsync(StringContent? content)
+        public async Task<ServiceResponse> AddAsync(HttpContent content)
         {
             var response = await _client.PostAsync("api/ServiceProvider", content);
 
