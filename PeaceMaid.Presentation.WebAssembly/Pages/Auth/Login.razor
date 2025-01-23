@@ -1,4 +1,4 @@
-﻿@page "/login" 
+﻿@page "/auth/login" 
 
 @using NetcodeHub.Packages.Components.Toast
 @using PeaceMaid.Application.Services
@@ -34,9 +34,7 @@ Duration="duration" />
     NetcodeHubToast? toastComp;
     int duration = 4000;
 
-    /// <summary>
-    /// Model for login
-    /// </summary>
+    // Model for login
     UserDTO loginUser = new UserDTO
     {
         Email = string.Empty,
@@ -49,7 +47,7 @@ Duration="duration" />
         {
             duration = 5000;
             await toastComp.ShowErrorToast("Session Expired", "Your session has expired. Please log in again.");
-            navigationManager.NavigateTo("/login");
+            navigationManager.NavigateTo("https://localhost:7203/auth/login");
 
         }
     }
@@ -67,7 +65,7 @@ Duration="duration" />
         }
 
         var result = await userService.LoginAsync(loginUser);
-        Console.WriteLine(result);
+        
         if (result.Message.Contains("Not logged in"))
         {
             duration = 5000;
@@ -76,6 +74,8 @@ Duration="duration" />
         }
 
         await toastComp.ShowSuccessToast("Success", "Logged in successfully!");
-        // Redirect to another page or handle successful login logic
+
+        // Redirect to service-providers page
+        navigationManager.NavigateTo("https://localhost:7203/service-providers");
     }
 }

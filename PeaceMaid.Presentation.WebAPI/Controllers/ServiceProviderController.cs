@@ -21,7 +21,6 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Post([FromForm] ServiceProviderDTO serviceProviderDTO)
         {
             if (serviceProviderDTO == null)
@@ -65,7 +64,6 @@ namespace PeaceMaid.Presentation.WebAPI.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        [Authorize]
         public async Task<IActionResult> Delet(int id)
         {
             var result = await _sProvider.DeleteAsync(id);

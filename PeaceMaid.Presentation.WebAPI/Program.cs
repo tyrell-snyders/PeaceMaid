@@ -53,6 +53,11 @@ if (app.Environment.IsDevelopment())
             .AllowAnyMethod()
             .AllowAnyHeader()
             .WithHeaders(HeaderNames.ContentType);
+
+        policy.WithOrigins("http://localhost:5132")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithHeaders(HeaderNames.ContentType);
     });
 }
 

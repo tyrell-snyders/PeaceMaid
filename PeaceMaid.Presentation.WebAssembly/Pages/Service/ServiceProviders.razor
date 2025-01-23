@@ -14,7 +14,6 @@
 
 <h3>Service Providers</h3>
 
-
 <Modal @ref="modal" title="Register as service provider" IsVerticallyCentered="true" IsScrollable="true">
     <BodyTemplate>
         <EditForm Model="sProvider" OnValidSubmit="HandleValidSubmit">
@@ -52,11 +51,11 @@
     </FooterTemplate>
 </Modal>
 
-
+@* Service Providers *@
 <div class="col-lg-6 container">
     @foreach (ServiceProvider srvProvider in serviceProviders)
     {
-        <div accesskey="@srvProvider.Id" class="service-card mb-5 mt-5 rounded mx-auto border-5 border-primary">
+        <div class="service-card mb-5 mt-5 rounded mx-auto border-5 border-primary">
             <img src="@ProfilePicture(srvProvider.ProfilePicture)"
             class="card-img-top"
             alt="profile picture">
@@ -64,7 +63,16 @@
                 <h5 class="card-subtitle">Rating: @srvProvider.Rating</h5>
                 <p class="card-text">@srvProvider.ServiceDescription</p>
             </div>
-            <Button Color="ButtonColor.Danger" class="float-left">Delete</Button>
+            @if (srvProvider.UserId.Equals(uID))
+            {
+                <Button 
+                    Color="ButtonColor.Danger"
+                    onclick="@(() => HandleDelete(srvProvider.Id))"
+                    class="float-right"
+                >
+                    Delete
+                </Button>
+            }
         </div>
     }
 </div>
@@ -80,10 +88,12 @@
 @code {
     //Get Service Providers
     private List<ServiceProvider> serviceProviders = new List<ServiceProvider>();
+    private int uID = 0;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadProviders();
+        StateHasChanged();
     }
 
     private async Task LoadProviders() 
@@ -91,6 +101,7 @@
         try 
         {
             serviceProviders = await iSvcProviderService.GetAsync();
+            uID = await iSvcProviderService.GetUserId(); // Get UserId
         } 
         catch (Exception e)
         {
@@ -134,39 +145,17 @@
         SelectedFile = e.File;
     }
 
+    private async Task HandleDelete(int spId) {
+        var result = await iSvcProviderService.DeleteAsync(spId);
+        if (result.Flag) 
+            NavigationManager.Refresh();
+        else
+            Console.WriteLine(result.Message);
+    }
+
+
     private async Task HandleValidSubmit()
     {
-        // JsonContent
-        // if (SelectedFile != null)
-        // {
-        //     byte[] fileBytes;
-        //     using (var memoryStream = new MemoryStream())
-        //     {
-        //         await SelectedFile.OpenReadStream(5120000).CopyToAsync(memoryStream);
-        //         fileBytes = memoryStream.ToArray();
-        //     }
-
-        //     sProvider.ProfilePicture = fileBytes;
-        //     var jsonString = JsonSerializer.Serialize(sProvider);
-        //     var jsonContent = new StringContent(JsonSerializer.Serialize(sProvider), Encoding.UTF8, "application/json");
-        //     Console.WriteLine(jsonString);
-        //     var response = await iSvcProviderService.AddAsync(jsonContent);
-
-        //     Message = response.Message;
-        //     if (response.Flag)
-        //     {
-        //         NavigationManager.NavigateTo("/services/service-providers");
-        //     }
-        //     else
-        //     {
-        //         Console.WriteLine(response.Message);
-        //     }
-        // }
-        // else
-        // {
-        //     Message = "Please upload a profile picture.";
-        // }
-
         // MultipartFormDataContent
         if (SelectedFile != null)
         {

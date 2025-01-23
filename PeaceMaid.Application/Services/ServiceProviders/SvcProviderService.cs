@@ -23,10 +23,17 @@ namespace PeaceMaid.Application.Services.ServiceProviders
             return new(false, error!);
         }
 
-
-        public Task<ServiceResponse> DeleteAsync(int Id)
+        public async Task<int> GetUserId()
         {
-            throw new NotImplementedException();
+            var userId = int.Parse(await _jSRuntime.InvokeAsync<string>("sessionStorage.getItem", "userID"));
+            return userId;
+        }
+
+
+        public async Task<ServiceResponse> DeleteAsync(int Id)
+        {
+            var response = await _client.DeleteAsync($"api/ServiceProvider/delete/{Id}");
+            return new(true, $"{response.StatusCode}");
         }
 
         public async Task<List<ServiceProvider>> GetAsync() =>

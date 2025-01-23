@@ -1,4 +1,4 @@
-﻿@page "/register"
+﻿@page "/auth/register"
 
 @using NetcodeHub.Packages.Components.Toast
 @using PeaceMaid.Application.Services
@@ -41,7 +41,7 @@
     int duration = 4000;
     User user = new User
         {
-            Username = string.Empty,  // Set default or placeholder values for required properties
+            Username = string.Empty,
             Email = string.Empty,
             HashedPass = string.Empty,
 

@@ -11,5 +11,6 @@ namespace PeaceMaid.Application.Services.ServiceProviders
         Task<ServiceResponse> UpdateAsync(ServiceProviderDTO serviceProviderDTO);
         Task<ServiceProvider?> GetProviderAsync(int userId);
         Task<List<Service>> GetServicesByProvider(int providerId);
+        Task<int> GetUserId();
     }
 }
