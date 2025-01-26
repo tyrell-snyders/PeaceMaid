@@ -1,13 +1,49 @@
-﻿@page "/service-providers/services"
+﻿@page "/service-providers/services/{Id}"
 
+@using BlazorBootstrap
 @using PeaceMaid.Application.Services.Svcs
 @using PeaceMaid.Domain.Entities
 
 @inject ISvcsService svcsService
+@inject NavigationManager NavigationManager
 
 <h3>Our Services</h3>
 
+@* modal for individual service *@
 @* <Modal></Modal> *@
+
+@* modal to add a service *@
+<Modal @ref="modal" title="Add a Service" IsVerticallyCentered="true" IsScrollable="true">
+    <BodyTemplate>
+        <EditForm Model="service" OnValidSubmit="AddService">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div>
+                <label for="name">Name:</label>
+                    <InputText id="name" @bind-Value="service.Name" />
+            </div>
+
+            <div>
+                <label for="description">Description:</label>
+                <InputText id="description" @bind-Value="service.Description" />
+            </div>
+
+            <div>
+                <label for="price">Price:</label>
+                <InputNumber id="price" @bind-Value="service.Price" />
+            </div>
+
+            <div>
+                <label for="duration">Duration:</label>
+                <InputText id="duration" @bind-Value="durationInput" @oninput="UpdateDuration" />
+            </div>
+        </EditForm>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Primary" onclick="@AddService">Add</Button>
+        <Button Color="ButtonColor.Secondary" onclick="@OnHideModal">Cancel</Button>
+    </FooterTemplate>
+</Modal>
 
 <div class="services-container">
     @if (isLoading)
@@ -40,16 +76,21 @@
     }
 
     <div class="service-add container">
-        <button class="btn-primary">+</button>
+        @* for add service *@
+        <Button class="btn-primary" Color="ButtonColor.Primary" onclick="@OnShowModal">+</Button>
     </div>
+
 </div>
 
 @code {
+    [Parameter]
+    public string Id { get; set; }
+    private int spId;
+    private string durationInput = "00:00";
     private List<Service>? services;
+    private Service service;
     private bool isLoading = true;
     private string? fetchError;
-    private bool isModalOpen = false;
-
 
     // Fetch services when the page initializes
     protected override async Task OnInitializedAsync()
@@ -57,6 +98,15 @@
         try
         {
             services = await svcsService.GetAsync();
+            spId = int.Parse(Id);
+            service = new Service
+            {
+                ServiceId = spId,
+                Name = string.Empty,
+                Description = string.Empty,
+                Price = 0,
+                Duration = TimeSpan.MaxValue
+            };
         }
         catch (Exception e)
         {
@@ -65,35 +115,39 @@
         finally
         {
             isLoading = false;
+            StateHasChanged();
         }
     }
 
+    private Modal modal = default;
+
     // Add Services Modal
-    private void ShowModal() 
+    private async Task OnShowModal() 
     {
-        isModalOpen = true;
+        await modal.ShowAsync();
     }
 
-    private void CloseModal() 
+    private async Task OnHideModal() 
     {
-        isModalOpen = false;
+        await modal.HideAsync();
+    }
+
+    @* Parse the time *@
+    private void UpdateDuration(ChangeEventArgs e)
+    {
+        durationInput = e.Value?.ToString() ?? "00:00";
+        TimeSpan.TryParse(durationInput, out var parsedDuration);
+        service.Duration = parsedDuration;
     }
 
     private async Task AddService() 
     {
-        // try 
-        // {
-        //     var newService = new Service 
-        //     { 
-        //         Name
-        //     };
-        //     await svcsService.AddAsync(newService);
-        //     services?.Add(newService);
-        //     CloseModal();
-        // } 
-        // catch (Exception e) 
-        // {
-        //     fetchError = e.Message;
-        // }
+        var result = await svcsService.AddAsync(service);
+        if (result.Flag) 
+            NavigationManager.Refresh();
+        else 
+            fetchError = result.Message;
+
+        await OnHideModal();       
     }
 }
